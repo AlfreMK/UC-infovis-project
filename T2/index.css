@@ -12,10 +12,18 @@ body{
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+    margin: 10px;
+    width: 200px;
 }
 
 #category{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    width: 75%;
+}
+.category-title{
+    word-break: normal;
+    width: 200px;
+    text-align: center;
 }

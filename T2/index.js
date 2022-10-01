@@ -11,20 +11,26 @@ const categoryContainer = d3.select("#category");
 // Creamos una función que se encarga de actualizar el SVG según los datos que llegan.
 function joinDeDatos(datos) {
     // Definimos el ancho y largo del SVG.
+    const maxArtwork = d3.max(datos, d => d.artwork);
+    const maxArtist = d3.max(datos, d => d.artist);
+    const artworkScale = d3.scaleLinear().domain([0, maxArtwork]).rangeRound([0, 50]);
+    const artistScale = d3.scaleLinear().domain([0, maxArtist]).rangeRound([0, 30]);
     for (let i = 0; i < datos.length; i++) {
-        createSvg(datos[i]);
-
-  }
+      createSvgCategory(datos[i], artworkScale, artistScale);
+    }
 }
-function createSvg(data) {
+function createSvgCategory(data, artworkScale, artistScale) {
     const container = categoryContainer.append("div").attr("class", "category-container");
-    const title = container.append("h3").text(data.category);
-    const svg = container.append("svg");
-    svg.attr("width", 200).attr("height", 200);
+    const title = container.append("h3").text(data.category).attr("class", "category-title");
+    
+    const svg = container.append("svg").attr("width", 50).attr("height", 100).attr("style",
+    `border: ${artistScale(data.artist)}px solid orange;`+
+    `padding: ${artworkScale(data.artwork)}px;`
+    ) ;
 
     const rectMale = svg.append("rect");
     const rectFemale = svg.append("rect");
-    const MfScale = d3.scaleLinear().domain([0, data.male+data.female]).range([0, 100]);
+    const MfScale = d3.scaleLinear().domain([0, data.male+data.female]).rangeRound([0, 100]);
     rectFemale.attr("width", 50).attr("height", MfScale(data.female)).attr("fill", "red");
     rectMale.attr("y", MfScale(data.female))
     rectMale.attr("width", 50).attr("height", MfScale(data.male)).attr("fill", "blue");
