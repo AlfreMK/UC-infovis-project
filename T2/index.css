@@ -4,6 +4,8 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: rgb(134,206,203);
+    /* color: rgb(55,59,62); */
 }
 
 .category-container{
@@ -16,7 +18,13 @@ body{
     width: 200px;
 }
 
-#category{
+#categories{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 75%;
+}
+#artists{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -26,4 +34,14 @@ body{
     word-break: normal;
     width: 200px;
     text-align: center;
+}
+
+.artist-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 10px;
+    width: 200px;
 }
