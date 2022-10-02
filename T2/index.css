@@ -30,9 +30,19 @@ body{
     flex-wrap: wrap;
     width: 75%;
 }
+
+#filters{
+    margin: 50px;
+}
 .category-title{
     word-break: normal;
     width: 200px;
+    text-align: center;
+}
+
+.artist-title{
+    word-break: normal;
+    width: 100px;
     text-align: center;
 }
 
@@ -43,5 +53,5 @@ body{
     justify-content: center;
     flex-wrap: wrap;
     margin: 10px;
-    width: 200px;
+    width: 100px;
 }
