@@ -14,15 +14,25 @@
         
     </div>
     <div>
-      <button onclick="onlyFemale();">
-        Only Female
-      </button>
-      <button onclick="onlyMale();">
-        Only Male
-      </button>
-      <button onclick="runCodeArtist();">
-        Reset
-      </button>
+      <div>
+        <button onclick="onlyFM(0);">
+          Only Female
+        </button>
+        <button onclick="onlyFM(1);">
+          Only Male
+        </button>
+        <button onclick="runCodeArtist();">
+          Reset
+        </button>
+      </div>
+      <div>
+        Order by:
+        <select id="selector" onchange="selectorCode();">
+          <option>Default</option>
+          <option>Alphabetical</option>
+          <option>Age</option>
+        </select>
+      </div>
     </div>
     <div id="artists">
         
