@@ -18,7 +18,7 @@ function dataJoinCategory(datos) {
 }
 
 function transformNameintoClass(name){
-  name = name.replace("&", "and");
+  name = name.replace(/[#_,.;(){}:+?$%&/]/g, "");
     return name.replace(/ /g, "-").toLowerCase();
 }
 

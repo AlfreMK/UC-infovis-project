@@ -28,15 +28,31 @@ function onlyFM(genderInput){
         artistContainer.selectAll(`.Male`).style("display", "block");
     }
 }
-
+function changeOpacity(id, leave=false){
+    if (leave){
+        artistContainer.selectAll(`.artist-container`)
+        .style("opacity", 1)
+        .style("transition", "opacity 0.5s");
+    }
+    else{
+        artistContainer.selectAll(`.artist-container`)
+        .style("opacity", 0.2)
+        .style("transition", "opacity 0.5s");
+        artistContainer.select(`#${id}`).style("opacity", 1);
+    }
+}
 
 function createSvgArtist(data, artworkScale) {
     const radius = artworkScale(parseInt(data.Categories[CURRENT_CATEGORY]));
+    const idContainer = transformNameintoClass(data.Artist);
     const container = artistContainer.append("div")
         .attr("class", "artist-container "+ data.Gender)
+        .attr("id", idContainer)
         .attr("title", infoArtist(data));
     const HEIGHT = 200-(radius+data.age);
-    const svg = container.append("svg").attr("width", 100).attr("height", 200);
+    const svg = container.append("svg").attr("width", 100).attr("height", 200)
+        .attr("onmouseover", "changeOpacity('"+ idContainer+ "');")
+        .attr("onmouseleave", "changeOpacity('"+ idContainer+ "', true);");
     const tallo = svg.append("rect")
         .attr("x", 50).attr("y", HEIGHT+radius)
         .attr("width", 5)
