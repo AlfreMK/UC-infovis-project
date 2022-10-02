@@ -16,8 +16,18 @@ function dataJoinCategory(datos) {
     const artistScale = d3.scaleLinear().domain([0, maxArtist]).rangeRound([0, 30]);
     datos.map(d => createSvgCategory(d, artworkScale, artistScale));
 }
+
+function transformNameintoClass(name){
+  name = name.replace("&", "and");
+    return name.replace(/ /g, "-").toLowerCase();
+}
+
 function createSvgCategory(data, artworkScale, artistScale) {
-    const container = categoryContainer.append("div").attr("class", "category-container").attr("onclick", `runCodeArtist("${data.category}");`);
+    const MfScale = d3.scaleLinear().domain([0, data.male+data.female]).rangeRound([0, 100]);
+    const container = categoryContainer.append("div")
+      .attr("class", "category-container " + transformNameintoClass(data.category))
+      .attr("onclick", `runCodeArtist("${data.category}");`)
+      .attr("title", "Femenino: "+MfScale(data.female)+"%"+"\nMasculino: "+MfScale(data.male)+"%" );
     const title = container.append("h3").text(data.category).attr("class", "category-title");
     
     const svg = container.append("svg").attr("width", 50).attr("height", 100).attr("style",
@@ -28,11 +38,9 @@ function createSvgCategory(data, artworkScale, artistScale) {
 
     const rectMale = svg.append("rect");
     const rectFemale = svg.append("rect");
-    const MfScale = d3.scaleLinear().domain([0, data.male+data.female]).rangeRound([0, 100]);
     rectFemale.attr("width", 50).attr("height", MfScale(data.female)).attr("fill", "rgb(225,40,133)");
     rectMale.attr("y", MfScale(data.female))
     rectMale.attr("width", 50).attr("height", MfScale(data.male)).attr("fill", "rgb(19,122,127)");
-    
 }
 
 
@@ -54,7 +62,6 @@ function runCode() {
     URL = URL + "CategoryProcessed.csv";
     console.log(URL)
     d3.csv(URL, parsingCategory).then((data) => {
-      console.log(data)
       dataJoinCategory(data)
     }).catch(error => {
       console.log(error)
