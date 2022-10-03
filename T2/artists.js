@@ -167,9 +167,11 @@ function sortDivs() {
             a = parseInt(a);
             b = parseInt(b);
             return CURRENT_DATA.findIndex(d => d.aid === a) - CURRENT_DATA.findIndex(d => d.aid === b);
-        })
+        }).transition()
+        .duration(500)
+        // https://stackoverflow.com/questions/32520950/animated-sort-stacked-bar-chart-d3-js
     
-
+        
 }
 
 const parseData = (d) => ({
