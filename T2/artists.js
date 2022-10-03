@@ -1,6 +1,6 @@
 
 var CURRENT_CATEGORY = "";
-
+var CURRENT_DATA = [];
 const selectOrder = document.getElementById("selector");
 const artistContainer = d3.select("#artists");
 // https://github.com/PUC-Infovis/codigos-2022-2/blob/main/Clase%2011%20-%20Utilidades%20D3%20I/programa_desarrollo_clases.js
@@ -27,6 +27,10 @@ function onlyFM(genderInput){
         artistContainer.selectAll(`.Female`).style("display", "none");
         artistContainer.selectAll(`.Male`).style("display", "block");
     }
+    else if (genderInput===-1){
+        artistContainer.selectAll(`.Male`).style("display", "block");
+        artistContainer.selectAll(`.Female`).style("display", "block");
+    }
 }
 function changeOpacity(id, leave=false){
     if (leave){
@@ -44,13 +48,15 @@ function changeOpacity(id, leave=false){
 
 function createSvgArtist(data, artworkScale) {
     const radius = artworkScale(parseInt(data.Categories[CURRENT_CATEGORY]));
-    const idContainer = transformNameintoClass(data.Artist);
+    const idContainer = "artist-"+data.aid;
     const container = artistContainer.append("div")
         .attr("class", "artist-container "+ data.Gender)
         .attr("id", idContainer)
         .attr("title", infoArtist(data));
     const HEIGHT = 200-(radius+data.age);
-    const svg = container.append("svg").attr("width", 100).attr("height", 200)
+    const svg = container.append("svg")
+        .data([data])
+        .attr("width", 100).attr("height", 200)
         .attr("onmouseover", "changeOpacity('"+ idContainer+ "');")
         .attr("onmouseleave", "changeOpacity('"+ idContainer+ "', true);");
     const tallo = svg.append("rect")
@@ -119,19 +125,45 @@ function ageArtist(data){
 // TotalArtwork: "2"
 
 
-function selectorCode(){
+function selectorCode(reset=false){
+    if (reset){
+        onlyFM(-1);
+        CURRENT_DATA.sort((a, b) => (a.aid > b.aid) ? 1 : -1);
+        return
+    }
     if (CURRENT_CATEGORY === ""){
         return
     }
     if (selectOrder.value === "Alphabetical"){
-        runCodeArtist(CURRENT_CATEGORY, true, false);
+        CURRENT_DATA.sort((a, b) => (a.Artist > b.Artist) ? 1 : -1);
+        // change order of containers
     }
     else if (selectOrder.value === "Age"){
-        runCodeArtist(CURRENT_CATEGORY, false, true);
+        CURRENT_DATA.sort((a, b) => (a.age > b.age) ? 1 : -1);
+    }
+    else if (selectOrder.value === "Artwork"){
+        CURRENT_DATA.sort((a, b) => (a.Categories[CURRENT_CATEGORY] > b.Categories[CURRENT_CATEGORY]) ? 1 : -1);
     }
     else{
-        runCodeArtist();
+        CURRENT_DATA.sort((a, b) => (a.aid > b.aid) ? 1 : -1);
     }
+
+    sortDivs();
+
+}
+
+function sortDivs() {
+    const divs = artistContainer.selectAll(".artist-container");
+    
+    console.log(artistContainer.selectAll(`.artist-container`));
+    // artistContainer.selectAll(`.artist-container`).sort(function(a, b) {
+    //     // console.log
+    //     // return d3.ascending(a.aid, b.aid);
+    //     // return d3.ascending(CURRENT_DATA.indexOf(a), CURRENT_DATA.indexOf(b));
+    // });
+
+    
+
 }
 
 const parseData = (d) => ({
@@ -147,7 +179,7 @@ function parseDict(string){
     return JSON.parse(string);
 }
 
-function runCodeArtist(category=CURRENT_CATEGORY, orderAlpha=false, orderAge=false) {
+function runCodeArtist(category=CURRENT_CATEGORY) {
     // hacerlo con enter y exit
     d3.select("#categories").selectAll(".category-container")
         .attr("style", "filter: opacity(50%)");
@@ -160,15 +192,9 @@ function runCodeArtist(category=CURRENT_CATEGORY, orderAlpha=false, orderAge=fal
       CURRENT_CATEGORY = category;
       data = data.filter((d) => d.Categories.hasOwnProperty(category));
       data = data.filter(d => Math.random() > 0.7).slice(0, 100);
-        if (orderAlpha) {
-            data = data.sort((a, b) => a.Artist.localeCompare(b.Artist));
-        }
-        // console.log(data);
-        // console.log(CURRENT_CATEGORY)
-        if (orderAge) {
-            data = data.sort((a, b) => a.age - b.age);
-            // console.log(data);
-        }
+      let id = 0;
+      data = data.map((d) => ({ ...d, aid: id++ }));
+      CURRENT_DATA = data;
         dataJoinArtist(data);
     }).catch(error => {
       console.log(error);
