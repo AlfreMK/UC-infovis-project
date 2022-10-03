@@ -2,6 +2,7 @@
 var CURRENT_CATEGORY = "";
 var CURRENT_DATA = [];
 const selectOrder = document.getElementById("selector");
+const selectOrder2 = document.getElementById("selector-2");
 const artistContainer = d3.select("#artists");
 // https://github.com/PUC-Infovis/codigos-2022-2/blob/main/Clase%2011%20-%20Utilidades%20D3%20I/programa_desarrollo_clases.js
 
@@ -14,7 +15,10 @@ const artistContainer = d3.select("#artists");
 function dataJoinArtist(datos) {
     const maxArtwork = d3.max(datos, d => parseInt(d.Categories[CURRENT_CATEGORY]));
     const artworkScale = d3.scaleLinear().domain([0, maxArtwork]).rangeRound([10, 48]);
-    datos.map(d => createSvgArtist(d, artworkScale));
+    // datos.map(d => createSvgArtist(d, artworkScale));
+
+    artistContainer.selectAll("div")
+        .data(datos, d => createSvgArtist(d, artworkScale));
     
 }
 
@@ -55,7 +59,6 @@ function createSvgArtist(data, artworkScale) {
         .attr("title", infoArtist(data));
     const HEIGHT = 200-(radius+data.age);
     const svg = container.append("svg")
-        .data([data])
         .attr("width", 100).attr("height", 200)
         .attr("onmouseover", "changeOpacity('"+ idContainer+ "');")
         .attr("onmouseleave", "changeOpacity('"+ idContainer+ "', true);");
@@ -83,7 +86,7 @@ function createSvgArtist(data, artworkScale) {
             .attr("transform", "rotate(40, 40, "+rama_position+")");
     }
     const title = container.append("p").text(textArtist(data.Artist)).attr("class", "artist-title");
-    
+    return container;
 }
 
 function infoArtist(data){
@@ -129,11 +132,13 @@ function selectorCode(reset=false){
     if (reset){
         onlyFM(-1);
         CURRENT_DATA.sort((a, b) => (a.aid > b.aid) ? 1 : -1);
-        return
+        selectOrder.value = "Default";
+        selectOrder2.value = "Ascending";
     }
     if (CURRENT_CATEGORY === ""){
         return
     }
+    
     if (selectOrder.value === "Alphabetical"){
         CURRENT_DATA.sort((a, b) => (a.Artist > b.Artist) ? 1 : -1);
         // change order of containers
@@ -147,21 +152,22 @@ function selectorCode(reset=false){
     else{
         CURRENT_DATA.sort((a, b) => (a.aid > b.aid) ? 1 : -1);
     }
-
+    if (selectOrder2.value === "Descending"){
+        CURRENT_DATA.reverse();
+    }
     sortDivs();
 
 }
 
 function sortDivs() {
-    const divs = artistContainer.selectAll(".artist-container");
-    
-    console.log(artistContainer.selectAll(`.artist-container`));
-    // artistContainer.selectAll(`.artist-container`).sort(function(a, b) {
-    //     // console.log
-    //     // return d3.ascending(a.aid, b.aid);
-    //     // return d3.ascending(CURRENT_DATA.indexOf(a), CURRENT_DATA.indexOf(b));
-    // });
-
+    artistContainer.selectAll("div")
+        .datum(function() { 
+            return this.id.split("-")[1]; })
+        .sort(function(a, b) {
+            a = parseInt(a);
+            b = parseInt(b);
+            return CURRENT_DATA.findIndex(d => d.aid === a) - CURRENT_DATA.findIndex(d => d.aid === b);
+        })
     
 
 }
@@ -196,6 +202,7 @@ function runCodeArtist(category=CURRENT_CATEGORY) {
       data = data.map((d) => ({ ...d, aid: id++ }));
       CURRENT_DATA = data;
         dataJoinArtist(data);
+        selectorCode();
     }).catch(error => {
       console.log(error);
     })
