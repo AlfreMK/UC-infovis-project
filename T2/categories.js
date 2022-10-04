@@ -1,5 +1,17 @@
 
 
+var CATEGORY_COLORS = {
+  "Drawings": "#C8566B",
+  "Prints & Illustrated Books": "#9D75BF",
+  "Photography": "#4c9141",
+  "Architecture & Design": "#F2D48F",
+  "Painting & Sculpture": "#86AED1",
+  "Film": "#E78963",
+  "Media and Performance Art": "#FFA500",
+};
+
+// "#FF5F1F"
+
 const categoryContainer = d3.select("#categories");
 // https://github.com/PUC-Infovis/codigos-2022-2/blob/main/Clase%2011%20-%20Utilidades%20D3%20I/programa_desarrollo_clases.js
 
@@ -31,16 +43,16 @@ function createSvgCategory(data, artworkScale, artistScale) {
     const title = container.append("h3").text(data.category).attr("class", "category-title");
     
     const svg = container.append("svg").attr("width", 50).attr("height", 100).attr("style",
-    `border: ${artistScale(data.artist)}px solid orange;`+
+    `border: ${artistScale(data.artist)}px solid ${CATEGORY_COLORS[data.category]};`+
     `padding: ${artworkScale(data.artwork)}px;`+
     `background-color: white;`
     ) ;
 
     const rectMale = svg.append("rect");
     const rectFemale = svg.append("rect");
-    rectFemale.attr("width", 50).attr("height", MfScale(data.female)).attr("fill", "rgb(225,40,133)");
+    rectFemale.attr("width", 50).attr("height", MfScale(data.female)).attr("fill", "#ff629d");
     rectMale.attr("y", MfScale(data.female))
-    rectMale.attr("width", 50).attr("height", MfScale(data.male)).attr("fill", "rgb(19,122,127)");
+    rectMale.attr("width", 50).attr("height", MfScale(data.male)).attr("fill", "#088F8F");
 }
 
 

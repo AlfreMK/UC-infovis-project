@@ -3,6 +3,8 @@ var CURRENT_CATEGORY = "";
 var CURRENT_DATA = [];
 var CURRENT_FILTERS = {"Alive": true, "Dead": true, "Male": true, "Female": true};
 
+
+
 const selectOrder = document.getElementById("selector");
 const selectOrder2 = document.getElementById("selector-2");
 const artistContainer = d3.select("#artists");
@@ -58,6 +60,7 @@ function onlyAlive(){
             d.show = true;
         });
         joinBaseOnCurrentDataShow(CURRENT_DATA);
+        sortDivs();
     }
     else if (!aliveBool && !deadBool){
         removeAllDivs(".Alive");
@@ -67,7 +70,6 @@ function onlyAlive(){
             d.wasRemoved = true;
         });
     }
-    selectorCode();
 }
 
 
@@ -107,6 +109,7 @@ function onlyFM(){
             d.show = true;
         });
         joinBaseOnCurrentDataShow(CURRENT_DATA);
+        sortDivs();
     }
     else if (!femaleBool && !maleBool){
         removeAllDivs(".Male");
@@ -116,7 +119,6 @@ function onlyFM(){
             d.wasRemoved = true;
         });
     }
-    selectorCode();
 }
 
 function removeAllDivs(string){
@@ -159,6 +161,7 @@ function changeOpacity(id, leave=false){
 }
 
 function createSvgArtist(data, artworkScale) {
+    const color = CATEGORY_COLORS[CURRENT_CATEGORY];
     const radius = artworkScale(parseInt(data.Categories[CURRENT_CATEGORY]));
     const idContainer = "artist-"+data.aid;
     const container = artistContainer.append("div")
@@ -178,7 +181,7 @@ function createSvgArtist(data, artworkScale) {
     const cabeza = svg.append("circle")
         .attr("cx", 52)
         .attr("cy", HEIGHT)
-        .attr("r", radius).attr("fill", "#FF5F1F");
+        .attr("r", radius).attr("fill", color);
     const rama_position = (HEIGHT)+(data.age+radius)/2;
     const rama = svg.append("rect")
         .attr("x", 40)
