@@ -26,7 +26,8 @@ function dataJoinCategory(datos) {
     const maxArtist = d3.max(datos, d => d.artist);
     const artworkScale = d3.scaleLinear().domain([0, maxArtwork]).rangeRound([0, 50]);
     const artistScale = d3.scaleLinear().domain([0, maxArtist]).rangeRound([0, 30]);
-    datos.map(d => createSvgCategory(d, artworkScale, artistScale));
+    categoryContainer.selectAll("div")
+      .data(datos, d => createSvgCategory(d, artworkScale, artistScale));
 }
 
 function transformNameintoClass(name){

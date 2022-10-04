@@ -21,7 +21,97 @@ function dataJoinArtist(datos) {
     
 }
 
+function createSvgArtist(data, artworkScale) {
+    const color = CATEGORY_COLORS[CURRENT_CATEGORY];
+    const radius = artworkScale(parseInt(data.Categories[CURRENT_CATEGORY]));
+    const idContainer = "artist-"+data.aid;
+    const container = artistContainer.append("div")
+        .attr("class", "artist-container "+ data.Gender + " " + AliveOrDeath(data))
+        .attr("id", idContainer)
+        .attr("title", infoArtist(data));
+    const HEIGHT = 200-(radius+data.age);
+    const svg = container.append("svg")
+        .attr("width", 100).attr("height", 200)
+        .attr("onmouseover", "changeOpacity('"+ idContainer+ "');")
+        .attr("onmouseleave", "changeOpacity('"+ idContainer+ "', true);");
+    const tallo = svg.append("rect")
+        .attr("x", 50).attr("y", HEIGHT+radius)
+        .attr("width", 5)
+        .attr("height", data.age)
+        .attr("fill", "black");
+    const cabeza = svg.append("circle")
+        .attr("cx", 52)
+        .attr("cy", HEIGHT)
+        .attr("r", radius).attr("fill", color);
+    const rama_position = (HEIGHT)+(data.age+radius)/2;
+    const rama = svg.append("rect")
+        .attr("x", 40)
+        .attr("y", rama_position)
+        .attr("width", 3).attr("height", 12)
+        .attr("fill", "black")
+        .attr("transform", "rotate(-45, 47, "+rama_position+")");
+    if (data.DeathYear === "-1"){
+        const hoja = svg.append("ellipse")
+            .attr("cx", 40)
+            .attr("cy", rama_position)
+            .attr("rx", 14).attr("ry", 5).attr("fill", "black")
+            .attr("transform", "rotate(40, 40, "+rama_position+")");
+    }
+    const title = container.append("p").text(textArtist(data.Artist)).attr("class", "artist-title title-" + data.Gender);
+    return container;
+}
 
+function textArtist(name){
+    if (name.length > 10){
+        return name.substring(0, 7) + "...";
+    }
+    return name
+}
+
+function ageArtist(data){
+    const CURRENT_YEAR = 2022;
+    if (data.DeathYear === "-1"){
+        return (CURRENT_YEAR - parseInt(data.BirthYear))
+    }
+    else{
+        return (parseInt(data.DeathYear) - parseInt(data.BirthYear))
+    }
+}
+
+
+function infoArtist(data){
+    final_string = "";
+    final_string += "Name: " + data.Artist + "\n";
+    final_string += "Gender: " + data.Gender + "\n";
+    final_string += "Nacionality: " + data.Nacionality + "\n";
+    final_string += "Birth Year: " + data.BirthYear + "\n";
+    final_string += "Age: " + data.age + "\n";
+    return final_string;
+}
+
+function AliveOrDeath(data){
+    if (data.DeathYear === "-1"){
+        return "Alive";
+    }
+    else{
+        return "Dead";
+    }
+}
+
+
+
+
+// Artist: "Robert Arneson"
+// BirthYear: "1930"
+// Categories: "{'Drawings': 1, 'Prints & Illustrated Books': 1}"
+// DeathYear: "1992"
+// Gender: "Male"
+// Nacionality: "American"
+// TotalArtwork: "2"
+
+
+
+// FILTERS
 function onlyAlive(){
     const aliveBool = document.getElementById("checkbox-alive").checked;
     const deadBool = document.getElementById("checkbox-dead").checked;
@@ -159,92 +249,6 @@ function changeOpacity(id, leave=false){
         artistContainer.select(`#${id}`).style("opacity", 1);
     }
 }
-
-function createSvgArtist(data, artworkScale) {
-    const color = CATEGORY_COLORS[CURRENT_CATEGORY];
-    const radius = artworkScale(parseInt(data.Categories[CURRENT_CATEGORY]));
-    const idContainer = "artist-"+data.aid;
-    const container = artistContainer.append("div")
-        .attr("class", "artist-container "+ data.Gender + " " + AliveOrDeath(data))
-        .attr("id", idContainer)
-        .attr("title", infoArtist(data));
-    const HEIGHT = 200-(radius+data.age);
-    const svg = container.append("svg")
-        .attr("width", 100).attr("height", 200)
-        .attr("onmouseover", "changeOpacity('"+ idContainer+ "');")
-        .attr("onmouseleave", "changeOpacity('"+ idContainer+ "', true);");
-    const tallo = svg.append("rect")
-        .attr("x", 50).attr("y", HEIGHT+radius)
-        .attr("width", 5)
-        .attr("height", data.age)
-        .attr("fill", "black");
-    const cabeza = svg.append("circle")
-        .attr("cx", 52)
-        .attr("cy", HEIGHT)
-        .attr("r", radius).attr("fill", color);
-    const rama_position = (HEIGHT)+(data.age+radius)/2;
-    const rama = svg.append("rect")
-        .attr("x", 40)
-        .attr("y", rama_position)
-        .attr("width", 3).attr("height", 12)
-        .attr("fill", "black")
-        .attr("transform", "rotate(-45, 47, "+rama_position+")");
-    if (data.DeathYear === "-1"){
-        const hoja = svg.append("ellipse")
-            .attr("cx", 40)
-            .attr("cy", rama_position)
-            .attr("rx", 14).attr("ry", 5).attr("fill", "black")
-            .attr("transform", "rotate(40, 40, "+rama_position+")");
-    }
-    const title = container.append("p").text(textArtist(data.Artist)).attr("class", "artist-title title-" + data.Gender);
-    return container;
-}
-
-function infoArtist(data){
-    final_string = "";
-    final_string += "Name: " + data.Artist + "\n";
-    final_string += "Gender: " + data.Gender + "\n";
-    final_string += "Nacionality: " + data.Nacionality + "\n";
-    final_string += "Birth Year: " + data.BirthYear + "\n";
-    final_string += "Age: " + data.age + "\n";
-    return final_string;
-}
-
-function AliveOrDeath(data){
-    if (data.DeathYear === "-1"){
-        return "Alive";
-    }
-    else{
-        return "Dead";
-    }
-}
-
-function textArtist(name){
-    if (name.length > 10){
-        return name.substring(0, 7) + "...";
-    }
-    return name
-}
-
-function ageArtist(data){
-    const CURRENT_YEAR = 2022;
-    if (data.DeathYear === "-1"){
-        return (CURRENT_YEAR - parseInt(data.BirthYear))
-    }
-    else{
-        return (parseInt(data.DeathYear) - parseInt(data.BirthYear))
-    }
-}
-
-
-
-// Artist: "Robert Arneson"
-// BirthYear: "1930"
-// Categories: "{'Drawings': 1, 'Prints & Illustrated Books': 1}"
-// DeathYear: "1992"
-// Gender: "Male"
-// Nacionality: "American"
-// TotalArtwork: "2"
 
 
 function selectorCode(reset=false){

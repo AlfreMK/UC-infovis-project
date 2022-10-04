@@ -17,6 +17,7 @@ body{
     margin: 10px;
     width: 200px;
     cursor: pointer;
+    text-decoration: underline;
 }
 
 #categories{
@@ -72,4 +73,25 @@ body{
 
 .animation-scale{
     animation: scaleUp 0.5s ease-in-out;
+}
+
+h1{
+    margin: 50px;
+}
+
+.info-page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 10px;
+    width: 70%;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    translate: all 0.2s ease-in-out;
+    -webkit-transition: all 0.5s ease-out;
+    -o-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
 }
