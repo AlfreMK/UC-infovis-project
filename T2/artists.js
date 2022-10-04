@@ -1,40 +1,146 @@
 
 var CURRENT_CATEGORY = "";
 var CURRENT_DATA = [];
+var CURRENT_FILTERS = {"Alive": true, "Dead": true, "Male": true, "Female": true};
+
 const selectOrder = document.getElementById("selector");
 const selectOrder2 = document.getElementById("selector-2");
 const artistContainer = d3.select("#artists");
 // https://github.com/PUC-Infovis/codigos-2022-2/blob/main/Clase%2011%20-%20Utilidades%20D3%20I/programa_desarrollo_clases.js
 
 
-// Definimos el ancho y largo del SVG. CONSTANTES
-
-
-
-// Creamos una función que se encarga de actualizar el SVG según los datos que llegan.
 function dataJoinArtist(datos) {
     const maxArtwork = d3.max(datos, d => parseInt(d.Categories[CURRENT_CATEGORY]));
     const artworkScale = d3.scaleLinear().domain([0, maxArtwork]).rangeRound([10, 48]);
-    // datos.map(d => createSvgArtist(d, artworkScale));
 
     artistContainer.selectAll("div")
-        .data(datos, d => createSvgArtist(d, artworkScale));
+        .data(datos, d => createSvgArtist(d, artworkScale))
+        .enter()
     
 }
 
-function onlyFM(genderInput){
-    if (genderInput === 0){
-        artistContainer.selectAll(`.Male`).style("display", "none");
-        artistContainer.selectAll(`.Female`).style("display", "block");
+
+function onlyAlive(){
+    const aliveBool = document.getElementById("checkbox-alive").checked;
+    const deadBool = document.getElementById("checkbox-dead").checked;
+    CURRENT_FILTERS["Alive"] = aliveBool;
+    CURRENT_FILTERS["Dead"] = deadBool;
+    if(aliveBool && !deadBool){
+        removeAllDivs(".Dead");
+        CURRENT_DATA.map(d => {
+            string = AliveOrDeath(d);
+            if (string === "Dead"){
+                d.show = false;
+                d.wasRemoved = true;
+            }
+            if (string === "Alive"){
+                d.show = true;
+            }
+        });
+        joinBaseOnCurrentDataShow(CURRENT_DATA);
     }
-    else if (genderInput === 1){
-        artistContainer.selectAll(`.Female`).style("display", "none");
-        artistContainer.selectAll(`.Male`).style("display", "block");
+    else if(!aliveBool && deadBool){
+        removeAllDivs(".Alive");
+        CURRENT_DATA.map(d => {
+            string = AliveOrDeath(d);
+            if (string === "Alive"){
+                d.show = false;
+                d.wasRemoved = true;
+            }
+            if (string === "Dead"){
+                d.show = true;
+            }
+        });
+        joinBaseOnCurrentDataShow(CURRENT_DATA);
     }
-    else if (genderInput===-1){
-        artistContainer.selectAll(`.Male`).style("display", "block");
-        artistContainer.selectAll(`.Female`).style("display", "block");
+    else if (aliveBool && deadBool){
+        CURRENT_DATA.map(d => {
+            d.show = true;
+        });
+        joinBaseOnCurrentDataShow(CURRENT_DATA);
     }
+    else if (!aliveBool && !deadBool){
+        removeAllDivs(".Alive");
+        removeAllDivs(".Dead");
+        CURRENT_DATA.map(d => {
+            d.show = false;
+            d.wasRemoved = true;
+        });
+    }
+}
+
+
+function onlyFM(){
+    const femaleBool = document.getElementById("checkbox-female").checked;
+    const maleBool = document.getElementById("checkbox-male").checked;
+    CURRENT_FILTERS["Male"] = maleBool;
+    CURRENT_FILTERS["Female"] = femaleBool;
+    if (femaleBool && !maleBool){
+        removeAllDivs(".Male");
+        CURRENT_DATA.map(d => {
+            if (d.Gender === "Male"){
+                d.show = false;
+                d.wasRemoved = true;
+            }
+            if (d.Gender === "Female"){
+                d.show = true;
+            }
+        });
+        joinBaseOnCurrentDataShow(CURRENT_DATA);
+    }
+    else if (!femaleBool && maleBool){
+        removeAllDivs(".Female");
+        CURRENT_DATA.map(d => {
+            if (d.Gender === "Female"){
+                d.show = false;
+                d.wasRemoved = true;
+            }
+            if (d.Gender === "Male"){
+                d.show = true;
+            }
+        });
+        joinBaseOnCurrentDataShow(CURRENT_DATA);
+    }
+    else if (femaleBool && maleBool){
+        CURRENT_DATA.map(d => {
+            d.show = true;
+        });
+        joinBaseOnCurrentDataShow(CURRENT_DATA);
+    }
+    else if (!femaleBool && !maleBool){
+        removeAllDivs(".Male");
+        removeAllDivs(".Female");
+        CURRENT_DATA.map(d => {
+            d.show = false;
+            d.wasRemoved = true;
+        });
+    }
+}
+
+function removeAllDivs(string){
+    artistContainer.selectAll(string)
+            .transition()
+            .duration(1000)
+            .styleTween("transform", function() { return d3.interpolate("scale(1)", "scale(0)"); })
+            .remove();
+}
+
+function joinBaseOnCurrentDataShow(data){
+    const maxArtwork = d3.max(data, d => parseInt(d.Categories[CURRENT_CATEGORY]));
+        const artworkScale = d3.scaleLinear().domain([0, maxArtwork]).rangeRound([10, 48]);
+        data.map(d => {
+            if (checkFilters(d)){
+                createSvgArtist(d, artworkScale);
+                d.wasRemoved = false;
+            }
+        });
+}
+
+function checkFilters(data){
+    if (CURRENT_FILTERS[AliveOrDeath(data)] && CURRENT_FILTERS[data.Gender] && data.show === true && data.wasRemoved === true){
+        return true;
+    }
+    return false;
 }
 function changeOpacity(id, leave=false){
     if (leave){
@@ -54,7 +160,7 @@ function createSvgArtist(data, artworkScale) {
     const radius = artworkScale(parseInt(data.Categories[CURRENT_CATEGORY]));
     const idContainer = "artist-"+data.aid;
     const container = artistContainer.append("div")
-        .attr("class", "artist-container "+ data.Gender)
+        .attr("class", "artist-container "+ data.Gender + " " + AliveOrDeath(data))
         .attr("id", idContainer)
         .attr("title", infoArtist(data));
     const HEIGHT = 200-(radius+data.age);
@@ -85,7 +191,7 @@ function createSvgArtist(data, artworkScale) {
             .attr("rx", 14).attr("ry", 5).attr("fill", "black")
             .attr("transform", "rotate(40, 40, "+rama_position+")");
     }
-    const title = container.append("p").text(textArtist(data.Artist)).attr("class", "artist-title");
+    const title = container.append("p").text(textArtist(data.Artist)).attr("class", "artist-title title-" + data.Gender);
     return container;
 }
 
@@ -99,6 +205,14 @@ function infoArtist(data){
     return final_string;
 }
 
+function AliveOrDeath(data){
+    if (data.DeathYear === "-1"){
+        return "Alive";
+    }
+    else{
+        return "Dead";
+    }
+}
 
 function textArtist(name){
     if (name.length > 10){
@@ -130,7 +244,15 @@ function ageArtist(data){
 
 function selectorCode(reset=false){
     if (reset){
-        onlyFM(-1);
+        CURRENT_DATA.map(d => {
+            d.show = true;
+        });
+        CURRENT_FILTERS = {"Alive": true, "Dead": true, "Male": true, "Female": true};
+        document.getElementById("checkbox-alive").checked = true;
+        document.getElementById("checkbox-dead").checked = true;
+        document.getElementById("checkbox-male").checked = true;
+        document.getElementById("checkbox-female").checked = true;
+        joinBaseOnCurrentDataShow(CURRENT_DATA);
         CURRENT_DATA.sort((a, b) => (a.aid > b.aid) ? 1 : -1);
         selectOrder.value = "Default";
         selectOrder2.value = "Ascending";
@@ -167,8 +289,11 @@ function sortDivs() {
             a = parseInt(a);
             b = parseInt(b);
             return CURRENT_DATA.findIndex(d => d.aid === a) - CURRENT_DATA.findIndex(d => d.aid === b);
-        }).transition()
-        .duration(500)
+        })
+        .transition()
+        .styleTween("transform", function() { return d3.interpolate("scale(0)", "scale(1)"); })
+        .duration(1000);
+    
         // https://stackoverflow.com/questions/32520950/animated-sort-stacked-bar-chart-d3-js
     
         
@@ -178,6 +303,8 @@ const parseData = (d) => ({
     ...d,
     Categories: parseDict(d.Categories),
     age: ageArtist(d),
+    show: true,
+    wasRemoved: false,
   });
 
 

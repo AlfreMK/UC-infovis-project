@@ -14,16 +14,24 @@
         
     </div>
     <div id="filters">
+      <button onclick="selectorCode(true);">
+        Reset
+      </button>
       <div>
-        <button onclick="onlyFM(0);">
-          Only Female
-        </button>
-        <button onclick="onlyFM(1);">
-          Only Male
-        </button>
-        <button onclick="selectorCode(true);">
-          Reset
-        </button>
+        <input type="checkbox" id="checkbox-alive" checked onclick="onlyAlive();">
+          Alive
+        </input>
+        <input type="checkbox" id="checkbox-dead" checked onclick="onlyAlive();">
+          Dead
+        </input>
+      </div>
+      <div>
+        <input type="checkbox" id="checkbox-female" checked onclick="onlyFM();">
+          Female
+        </input>
+        <input type="checkbox" id="checkbox-male" checked onclick="onlyFM();">
+          Male
+        </input>
       </div>
       <div>
         Order by:
