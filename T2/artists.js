@@ -1,6 +1,7 @@
 
 var CURRENT_CATEGORY = "";
 var CURRENT_DATA = [];
+var Tooltip = d3.select("#tooltip")
 
 var artistContainer = d3.select("#artists");
 // https://github.com/PUC-Infovis/codigos-2022-2/blob/main/Clase%2011%20-%20Utilidades%20D3%20I/programa_desarrollo_clases.js
@@ -22,8 +23,8 @@ function createSvgArtist(data, artworkScale) {
     const idContainer = "artist-"+data.aid;
     const container = artistContainer.append("div")
         .attr("class", "artist-container "+ data.Gender + " " + AliveOrDeath(data))
-        .attr("id", idContainer)
-        .attr("title", infoArtist(data));
+        .attr("id", idContainer);
+        // .attr("title", infoArtist(data));
     const HEIGHT = 200-(radius+data.age);
     const svg = container.append("svg")
         .attr("width", 100).attr("height", 200)
@@ -53,8 +54,27 @@ function createSvgArtist(data, artworkScale) {
             .attr("transform", "rotate(40, 40, "+rama_position+")");
     }
     const title = container.append("p").text(textArtist(data.Artist)).attr("class", "artist-title title-" + data.Gender);
+        
+    container
+        .on("mouseover", function(event, d) {
+            // const[x, y] = d3.pointer(event);		
+            Tooltip.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            Tooltip
+                .style("left", (event.pageX) + "px")		
+                .style("top", (event.pageY) + "px");	
+            Tooltip.html(infoArtistHTML(data));
+            })					
+        .on("mouseout", function(d) {		
+            Tooltip.transition()		
+                .duration(500)		
+                .style("opacity", 0);	
+        });
     return container;
 }
+
+
 
 function textArtist(name){
     if (name.length > 10){
@@ -81,6 +101,17 @@ function infoArtist(data){
     final_string += "Nacionality: " + data.Nacionality + "\n";
     final_string += "Birth Year: " + data.BirthYear + "\n";
     final_string += "Age: " + data.age + "\n";
+    return final_string;
+}
+
+
+function infoArtistHTML(data){
+    final_string = "";
+    final_string += "<span> Name: " + data.Artist + "</span>";
+    final_string += "<span> Gender: " + data.Gender + "</span>";
+    final_string += "<span> Nacionality: " + data.Nacionality + "</span>";
+    final_string += "<span> Birth Year: " + data.BirthYear + "</span>";
+    final_string += "<span> Age: " + data.age + "</span>";
     return final_string;
 }
 

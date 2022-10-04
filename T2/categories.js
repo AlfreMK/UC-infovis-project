@@ -39,8 +39,8 @@ function createSvgCategory(data, artworkScale, artistScale) {
     const MfScale = d3.scaleLinear().domain([0, data.male+data.female]).rangeRound([0, 100]);
     const container = categoryContainer.append("div")
       .attr("class", "category-container " + transformNameintoClass(data.category))
-      .attr("onclick", `runCodeArtist("${data.category}");`)
-      .attr("title", "Femenino: "+MfScale(data.female)+"%"+"\nMasculino: "+MfScale(data.male)+"%" );
+      .attr("onclick", `runCodeArtist("${data.category}");`);
+      // .attr("title", "Femenino: "+MfScale(data.female)+"%"+"\nMasculino: "+MfScale(data.male)+"%" );
     const title = container.append("h3").text(data.category).attr("class", "category-title");
     
     const svg = container.append("svg").attr("width", 50).attr("height", 100).attr("style",
@@ -54,8 +54,27 @@ function createSvgCategory(data, artworkScale, artistScale) {
     rectFemale.attr("width", 50).attr("height", MfScale(data.female)).attr("fill", "#ff629d");
     rectMale.attr("y", MfScale(data.female))
     rectMale.attr("width", 50).attr("height", MfScale(data.male)).attr("fill", "#088F8F");
+
+    svg.on("mouseover", function(event, d) {
+        // const[x, y] = d3.pointer(event);		
+        Tooltip.transition()		
+            .duration(200)		
+            .style("opacity", .9);		
+        Tooltip
+            .style("left", (event.pageX) + "px")		
+            .style("top", (event.pageY) + "px");	
+        Tooltip.html(infoCategoryHTML(MfScale(data.female), MfScale(data.male)));
+        })					
+      .on("mouseout", function(d) {		
+        Tooltip.transition()		
+            .duration(500)		
+            .style("opacity", 0);	
+    });
 }
 
+function infoCategoryHTML(female, male){
+  return "<span>Femenino: "+female+"%"+"</span> <span>Masculino: "+male+"%</span>"
+}
 
 const parsingCategory = (d) => ({
     category: d.Category,
