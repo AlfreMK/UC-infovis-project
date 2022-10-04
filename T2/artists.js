@@ -67,6 +67,7 @@ function onlyAlive(){
             d.wasRemoved = true;
         });
     }
+    selectorCode();
 }
 
 
@@ -115,6 +116,7 @@ function onlyFM(){
             d.wasRemoved = true;
         });
     }
+    selectorCode();
 }
 
 function removeAllDivs(string){
