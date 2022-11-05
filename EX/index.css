@@ -7,3 +7,13 @@ body{
     /* background-color: rgb(134,206,203); */
     /* color: rgb(55,59,62); */
 }
+
+#main-container{
+    /* display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;  */
+    /* background-color: rgb(134,206,203); */
+    /* color: rgb(55,59,62);  */
+}
