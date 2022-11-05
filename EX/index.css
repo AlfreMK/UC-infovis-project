@@ -17,3 +17,37 @@ body{
     /* background-color: rgb(134,206,203); */
     /* color: rgb(55,59,62);  */
 }
+svg{
+    overflow: visible;
+}
+
+#players-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 70%;
+    margin: 50px;
+}
+
+.tooltip{
+    background-color: red;
+    width: 200px;
+    height: 100px;
+    border: 1px solid black;
+    position: absolute;
+    visibility: hidden;
+}
+
+.nameflag{
+    display: flex;
+    flex-direction: row;
+}
