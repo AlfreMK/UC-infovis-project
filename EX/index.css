@@ -31,7 +31,7 @@ svg{
     align-items: center;
     justify-content: center;
 }
-h2, h3{
+h2, h3, span{
     color:#f0d9b5;
 }
 .filters{
