@@ -8,9 +8,28 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-
+    <h2> Chess Players and their Ratings</h2>
+    <div class="filters">
+        <b>Filtros:</b>
+        <div>
+            Ritmo de Juego
+            <select id="selector-rating" onchange="">
+                <option>Classic</option>
+                <option>Rapid</option>
+                <option>Blitz</option>
+            </select>
+        </div>
+        <div>
+            <input type="checkbox" id="checkbox-female" checked onclick="">
+            Female
+            </input>
+            <input type="checkbox" id="checkbox-male" checked onclick="">
+            Male
+            </input>
+        </div>
+    </div>
     <h3>
-        Cantidad de personas dado su ELO Rating de ritmo clásico
+        Cantidad de personas dado su ELO Rating
     </h3>
     <div id="main-container">
         <svg id="main-svg"></svg>
