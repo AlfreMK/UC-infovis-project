@@ -4,6 +4,7 @@ body{
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: #262421;
     /* background-color: rgb(134,206,203); */
     /* color: rgb(55,59,62); */
 }
@@ -16,6 +17,9 @@ body{
     overflow: visible;  */
     /* background-color: rgb(134,206,203); */
     /* color: rgb(55,59,62);  */
+    background-color: #f0d9b5;
+    padding: 10px;
+    border-radius: 10px;
 }
 svg{
     overflow: visible;
@@ -36,6 +40,11 @@ svg{
     flex-wrap: wrap;
     width: 70%;
     margin: 50px;
+    background-color: #f0d9b5; 
+    /* #b58863 */
+    padding: 40px;
+    border-radius: 10px;
+
 }
 
 .tooltip{

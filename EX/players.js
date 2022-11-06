@@ -19,54 +19,18 @@ function dataJoinPlayers(datos) {
         .selectAll("div")
         .data(datos)
         .join("div");
-    // enter_and_update
-    //     .attr("x", (d, i) => (i%8)*75)
-    //     .attr("y", (d, i) => 200-escalaAltura(d.rating_standard)+Math.floor(i/8)*110);
     kingsvg(enter_and_update, escalaAltura);
     // tooltip(enter_and_update);
     enter_and_update.on("mouseover", function(d) {
         d3.selectAll(".king").style("opacity", "0.6");
         d3.select(this).select(".king").style("opacity", "1");
-        // d3.select(this).select(".tooltip").style("visibility", "visible");
     })
     .on("mouseout", function(d) { 
         d3.selectAll(".king").style("opacity", "1");
-        // d3.select(this).select(".tooltip").style("visibility", "hidden");
     });
     
-    // enter_and_update.append("image")
-    //     .attr("xlink:href", d => flagSvg(d.federation))
-    //     .attr("width", 25)
-    //     .attr("height", 25)
-    //     .attr("x", (d) => escalaX(d.name)%2)
-    //     .attr("y", (d) => Math.floor(escalaX(d.name)/2))
 }
 
-// function tooltip(container){
-//     const tooltip = container.append("div")
-//         .attr("class", "tooltip")
-//         .attr("x", 0)
-//         .attr("y", 0)
-    
-//     const nameflag = tooltip.append("div")
-//         .attr("class", "nameflag")
-//     const svg = nameflag.append("svg")
-//         .attr("width", 25)
-//         .attr("height", 25)
-//     svg.append("image")
-//         .attr("xlink:href", d => flagSvg(d.federation))
-//         .attr("width", 25)
-//         .attr("height", 25);
-//     nameflag.append("div")
-//         .text((d) => textTooltip(d)[0])
-//     tooltip.append("div")
-//         .text((d) => textTooltip(d)[1])
-//     tooltip.append("div")
-//         .text((d) => textTooltip(d)[2])
-//     tooltip.append("div")
-//         .text((d) => textTooltip(d)[3]);
-
-// }
 function textTooltip(data) {
     const text = data.name + "\n" + "\n" + 
         "Classic Rating: " + data.rating_standard + "\n" +
@@ -80,9 +44,13 @@ function posicionRect(d, escala) {
     return 154-escala(d.rating_standard)
 }
 
+function posicionXrect(num) {
+    return 40 + num
+}
+
 function kingsvg(svg, escalaAltura){
     // svg del rey
-    const color = "#383838";
+    const color = "#202020";
     // tronco del rey
     const rey = svg.append("svg")
         .attr("width", 100).attr("class", "king").attr("style", "cursor: pointer;")
@@ -94,38 +62,39 @@ function kingsvg(svg, escalaAltura){
         .attr("width", 20)
         .attr("height", (d) => escalaAltura(d.rating_standard))
         .attr("fill", color)
+        .attr("x", posicionXrect(0))
         .attr("y", (d) => posicionRect(d, escalaAltura))
         
     rey.append("rect")
         .attr("width", 5)
         .attr("height", 20)
         .attr("fill", color)
-        .attr("x", 7.5)
+        .attr("x", posicionXrect(7.5))
         .attr("y", (d, i) => posicionRect(d, escalaAltura) - 20);
     rey.append("rect")
         .attr("width", 20)
         .attr("height", 5)
         .attr("fill", color)
-        .attr("x", 0)
+        .attr("x", posicionXrect(0))
         .attr("y", (d, i) => posicionRect(d, escalaAltura) - 12);
     
     // cuello del rey
     rey.append("polygon")
-        .attr("points", (d) => `-5,${posicionRect(d, escalaAltura)} 25,${posicionRect(d, escalaAltura)} 10,${posicionRect(d, escalaAltura)+60}`)
+        .attr("points", (d) => `${posicionXrect(-5)},${posicionRect(d, escalaAltura)} ${posicionXrect(25)},${posicionRect(d, escalaAltura)} ${posicionXrect(10)},${posicionRect(d, escalaAltura)+60}`)
         .attr("fill", color)
-        .attr("x", -5)
+        .attr("x", posicionXrect(-5))
         .attr("y", (d, i) => posicionRect(d, escalaAltura) - 20);
     rey.append("rect")
         .attr("width", 40)
         .attr("height", 5)
         .attr("fill", color)
-        .attr("x", -10)
+        .attr("x", posicionXrect(-10))
         .attr("y", (d, i) => posicionRect(d, escalaAltura) + 20);
     rey.append("rect")
         .attr("width", 30)
         .attr("height", 5)
         .attr("fill", color)
-        .attr("x", -5)
+        .attr("x", posicionXrect(-5))
         .attr("y", (d, i) => posicionRect(d, escalaAltura) + 25);
     
     // base del rey
@@ -133,35 +102,35 @@ function kingsvg(svg, escalaAltura){
         .attr("width", 40)
         .attr("height", 5)
         .attr("fill", color)
-        .attr("x", -10)
+        .attr("x", posicionXrect(-10))
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)- 5);
     rey.append("rect")
         .attr("width", 35)
         .attr("height", 15)
         .attr("fill", color)
-        .attr("x", -7.5)
+        .attr("x", posicionXrect(-7.5))
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)- 15);
     rey.append("rect")
         .attr("width", 30)
         .attr("height", 5)
         .attr("fill", color)
-        .attr("x", -5)
+        .attr("x", posicionXrect(-5))
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)- 20);
     rey.append("polygon")
-        .attr("points",(d) => `-2,${posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)-20} 22,${posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)-20} 10,${posicionRect(d, escalaAltura)}`)
+        .attr("points",(d) => `${posicionXrect(-2)},${posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)-20} ${posicionXrect(22)},${posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)-20} ${posicionXrect(10)},${posicionRect(d, escalaAltura)}`)
         .attr("fill", color)
-        .attr("x", -5)
+        .attr("x", posicionXrect(-5))
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)- 20);
 
     rey.append("image")
         .attr("xlink:href", d => flagSvg(d.federation))
         .attr("width", 25)
         .attr("height", 25)
-        .attr("x", -2.5)
+        .attr("x", posicionXrect(-2.5))
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)+5);
         ;
     rey.append("text")
-        .attr("x", -20)
+        .attr("x", posicionXrect(-20))
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)+ 50)
         .text((d) => textPlayer(d.name))
 
@@ -181,7 +150,7 @@ function dataJoinGraph(datos) {
     minimoelo = d3.min(datos, d => d.min);
     maximo = d3.max(datos, d => d.length);
     minimo = d3.min(datos, d => d.length);
-    container.attr("width", 500).attr("height", 350);
+    container.attr("width", 435).attr("height", 345);
     const escalaAltura = d3.scaleLinear()
         .domain([0, maximo])
         .rangeRound([5, 300])
@@ -263,10 +232,24 @@ function divide_players_into_ranges(data){
     let minimo = d3.min(data, d => d.rating_standard);
     let num_ranges = 30;
     let range_size = (maximo - minimo) / num_ranges;
-    for (let i = 0; i < num_ranges; i++){
-        range = data.filter(d => d.rating_standard >= minimo + i * range_size && d.rating_standard < minimo + (i + 1) * range_size);
-        ranges.push(range);
-    }
+
+    // map version
+    
+    // list from 0 to num_ranges
+    let list_ranges = Array.from(Array(num_ranges).keys());
+
+    list_ranges.map(
+        (i) => {
+            let minimum = minimo + i * range_size;
+            let maximum = minimo + (i + 1) * range_size;
+            ranges.push(
+                data.filter(
+                    (d) => d.rating_standard >= minimum && d.rating_standard < maximum
+                )
+            );
+        }
+    )
+    
     // create an array of structs with max and min values, length
     let ranges_struct = [];
     ranges.map((d, i) => {
