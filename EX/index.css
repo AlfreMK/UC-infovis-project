@@ -31,7 +31,9 @@ svg{
     align-items: center;
     justify-content: center;
 }
-
+h3{
+    color:#f0d9b5;
+}
 .container{
     display: flex;
     flex-direction: row;
