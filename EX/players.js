@@ -146,7 +146,7 @@ function textPlayer(name){
 }
 
 function dataJoinGraph(datos) {
-    const container = mainContainer.append("svg");
+    const container = d3.select("#main-svg");
     maximoelo = d3.max(datos, d => d.max);
     minimoelo = d3.min(datos, d => d.min);
     maximo = d3.max(datos, d => d.length);
@@ -179,51 +179,35 @@ function dataJoinGraph(datos) {
         .attr("height", (d) => escalaAltura(d.length)) //Aplicamos nuestra escala
         .attr("y", (d) => escalaEjeY(d.length)) //Aplicamos nuestra escala
         .attr("x", (d) => escalaBarras(avg_rating(d)))
-        // add hover
-        // .on("mouseover", function(event, d) {
-        //     d3.select(this).attr("fill", "red");
-        // })
-        // .on("mouseout", function(event, d) {
-        //     d3.select(this).attr("fill", "#b58863");
-        // })
-        // // cursor pointer
-        // .style("cursor", "pointer")
-        // add brush        
+        
         ;
     const brushSelectedItemsContainer = container.append("g")
         .attr("class", "brush")
         .call(brush);
 
-    // svg for data in brush
-
-
-    // container.call(brush, container);
-    // append a title element to each rect
-    // enter_and_update.append("title")
-    //     .text(d => textTitleGraph(d));
-    // // add axis
-    // const axis = d3.axisLeft(escalaEjeY);
-    // container.append("g")
-    //     .attr("transform", "translate(410, 0)")
-    //     .call(axis)
-    //     .append("text")
-    //     .text("Cantidad de personas")
-    //     .attr("transform", "rotate(-90)")
-    //     .attr("y", 15)
-    //     .attr("x", -150)
-    //     .attr("fill", "#000");
-    // // add axis x
-    // const escalaAbajo = d3.scaleLinear()
-    //     .domain([minimoelo, maximoelo])
-    //     .rangeRound([0, 400])
-    // const axis_x = d3.axisBottom(escalaAbajo);
-    // container.append("g")
-    //     .attr("transform", "translate(0, 310)")
-    //     .call(axis_x)
-    //     .append("text")
-    //     .text("ELO Rating")
-    //     .attr("fill", "#000")
-    //     .attr("transform", "translate(200, 30)");
+    // add axis
+    const axis = d3.axisLeft(escalaEjeY);
+    container.append("g")
+        .attr("transform", "translate(410, 0)")
+        .call(axis)
+        .append("text")
+        .text("Cantidad de personas")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 15)
+        .attr("x", -150)
+        .attr("fill", "#000");
+    // add axis x
+    const escalaAbajo = d3.scaleLinear()
+        .domain([minimoelo, maximoelo])
+        .rangeRound([0, 400])
+    const axis_x = d3.axisBottom(escalaAbajo);
+    container.append("g")
+        .attr("transform", "translate(0, 310)")
+        .call(axis_x)
+        .append("text")
+        .text("ELO Rating")
+        .attr("fill", "#000")
+        .attr("transform", "translate(200, 30)");
 
 }
 
@@ -237,7 +221,8 @@ function brushed(event, escalaBarras, datos) {
                 return d;
         })
         // datajoin of svgdatabrush
-        // svgDataInBrush.selectAll("rect").remove();
+        svgDataInBrush.selectAll("rect").remove();
+        svgDataInBrush.selectAll("g").remove();
         const maximo = d3.max(filteredData, d => d.length);
         const escalaAltura = d3.scaleLinear()
         .domain([0, maximo])
@@ -249,7 +234,7 @@ function brushed(event, escalaBarras, datos) {
         .domain(filteredData.map(d => avg_rating(d)))
         .rangeRound([0, 400])
         .padding(0.1);
-
+        
         const enter_and_update = svgDataInBrush
             .selectAll("rect")
             .data(filteredData)
@@ -260,8 +245,40 @@ function brushed(event, escalaBarras, datos) {
             .attr("height", (d) => escalaAltura(d.length)) //Aplicamos nuestra escala
             .attr("y", (d) => escalaEjeY(d.length)) //Aplicamos nuestra escala
             .attr("x", (d) => escalaBarras1(avg_rating(d)))
-
-
+            // add hover
+            .on("mouseover", function(event, d) {
+                d3.select(this).attr("fill", "red");
+            })
+            .on("mouseout", function(event, d) {
+                d3.select(this).attr("fill", "#b58863");
+            })
+            // cursor pointer
+            .style("cursor", "pointer")
+            .append("title")
+            .text(d => textTitleGraph(d));
+        const maximoelo = d3.max(filteredData, d => d.max);
+        const minimoelo = d3.min(filteredData, d => d.min);
+        const escalaAbajo = d3.scaleLinear()
+            .domain([minimoelo, maximoelo])
+            .rangeRound([0, 400])
+        const axis_x = d3.axisBottom(escalaAbajo);
+        svgDataInBrush.append("g")
+            .attr("transform", "translate(0, 310)")
+            .call(axis_x)
+            .append("text")
+            .text("ELO Rating")
+            .attr("fill", "#000")
+            .attr("transform", "translate(200, 30)");
+            const axis = d3.axisLeft(escalaEjeY);
+            svgDataInBrush.append("g")
+                .attr("transform", "translate(410, 0)")
+                .call(axis)
+                .append("text")
+                .text("Cantidad de personas")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 15)
+                .attr("x", -150)
+                .attr("fill", "#000");
     }
 }
 
