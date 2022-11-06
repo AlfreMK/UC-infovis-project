@@ -1,6 +1,7 @@
 
 const mainContainer = d3.select("#main-container");
 const playersContainer = d3.select("#players-container");
+const svgDataInBrush = d3.select("#data-in-brush");
 
 
 function dataJoinPlayers(datos) {
@@ -162,57 +163,109 @@ function dataJoinGraph(datos) {
         .rangeRound([0, 400])
         .padding(0.1);
 
+
+    const brush = d3.brushX()
+        .extent( [ [0,0], [400,300] ] )
+        .on("end", (e) => brushed(e, escalaBarras, datos))
+
     const enter_and_update = container
         .selectAll("rect")
         .data(datos)
         .join("rect");
+        
     enter_and_update
         .attr("width", escalaBarras.bandwidth())
-        .attr("fill", "orange")  
+        .attr("fill", "#b58863")  
         .attr("height", (d) => escalaAltura(d.length)) //Aplicamos nuestra escala
         .attr("y", (d) => escalaEjeY(d.length)) //Aplicamos nuestra escala
         .attr("x", (d) => escalaBarras(avg_rating(d)))
         // add hover
-        .on("mouseover", function(event, d) {
-            d3.select(this).attr("fill", "red");
-        })
-        .on("mouseout", function(event, d) {
-            d3.select(this).attr("fill", "orange");
-        })
-        // cursor pointer
-        .style("cursor", "pointer")
+        // .on("mouseover", function(event, d) {
+        //     d3.select(this).attr("fill", "red");
+        // })
+        // .on("mouseout", function(event, d) {
+        //     d3.select(this).attr("fill", "#b58863");
+        // })
+        // // cursor pointer
+        // .style("cursor", "pointer")
+        // add brush        
         ;
+    const brushSelectedItemsContainer = container.append("g")
+        .attr("class", "brush")
+        .call(brush);
+
+    // svg for data in brush
+
+
+    // container.call(brush, container);
     // append a title element to each rect
-    enter_and_update.append("title")
-        .text(d => textTitleGraph(d));
-    // add axis
-    const axis = d3.axisLeft(escalaEjeY);
-    container.append("g")
-        .attr("transform", "translate(410, 0)")
-        .call(axis)
-        .append("text")
-        .text("Cantidad de personas")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 15)
-        .attr("x", -150)
-        .attr("fill", "#000");
-
-    // add axis x
-    const escalaAbajo = d3.scaleLinear()
-        .domain([minimoelo, maximoelo])
-        .rangeRound([0, 400])
-
-    const axis_x = d3.axisBottom(escalaAbajo);
-    container.append("g")
-        .attr("transform", "translate(0, 310)")
-        .call(axis_x)
-        .append("text")
-        .text("ELO Rating")
-        .attr("fill", "#000")
-        .attr("transform", "translate(200, 30)");
+    // enter_and_update.append("title")
+    //     .text(d => textTitleGraph(d));
+    // // add axis
+    // const axis = d3.axisLeft(escalaEjeY);
+    // container.append("g")
+    //     .attr("transform", "translate(410, 0)")
+    //     .call(axis)
+    //     .append("text")
+    //     .text("Cantidad de personas")
+    //     .attr("transform", "rotate(-90)")
+    //     .attr("y", 15)
+    //     .attr("x", -150)
+    //     .attr("fill", "#000");
+    // // add axis x
+    // const escalaAbajo = d3.scaleLinear()
+    //     .domain([minimoelo, maximoelo])
+    //     .rangeRound([0, 400])
+    // const axis_x = d3.axisBottom(escalaAbajo);
+    // container.append("g")
+    //     .attr("transform", "translate(0, 310)")
+    //     .call(axis_x)
+    //     .append("text")
+    //     .text("ELO Rating")
+    //     .attr("fill", "#000")
+    //     .attr("transform", "translate(200, 30)");
 
 }
 
+function brushed(event, escalaBarras, datos) {
+    const selection = event.selection; 
+    if (selection) {
+        console.log(selection);
+        // const [x0, x1] = selection.map(escalaBarras.invert);
+        const filteredData = datos.filter(d => {
+            if (escalaBarras(avg_rating(d)) >= selection[0] && escalaBarras(avg_rating(d)) <= selection[1])
+                return d;
+        })
+        // datajoin of svgdatabrush
+        // svgDataInBrush.selectAll("rect").remove();
+        const maximo = d3.max(filteredData, d => d.length);
+        const escalaAltura = d3.scaleLinear()
+        .domain([0, maximo])
+        .rangeRound([5, 300])
+        const escalaEjeY = d3.scaleLinear()
+        .domain([0, maximo])
+        .rangeRound([300, 5])
+        const escalaBarras1 = d3.scaleBand()
+        .domain(filteredData.map(d => avg_rating(d)))
+        .rangeRound([0, 400])
+        .padding(0.1);
+
+        const enter_and_update = svgDataInBrush
+            .selectAll("rect")
+            .data(filteredData)
+            .join("rect");
+        enter_and_update
+            .attr("width", escalaBarras1.bandwidth())
+            .attr("fill", "#b58863")
+            .attr("height", (d) => escalaAltura(d.length)) //Aplicamos nuestra escala
+            .attr("y", (d) => escalaEjeY(d.length)) //Aplicamos nuestra escala
+            .attr("x", (d) => escalaBarras1(avg_rating(d)))
+
+
+    }
+}
+
+///////////////////////////////////////
 function textTitleGraph(data) {
     text = "ELO Range: " + Math.round(data.min) + " - " + Math.round(data.max) + "\n"
     text += "Number of players: " + data.length;
@@ -257,7 +310,7 @@ function divide_players_into_ranges(data){
             id: i,
             min: minimo + i * range_size,
             max: minimo + (i + 1) * range_size,
-            length: d.length
+            length: d.length,
         })
     })
     return ranges_struct;
