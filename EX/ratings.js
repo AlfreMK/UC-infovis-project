@@ -34,7 +34,7 @@ function dataJoinGraph(datos) {
         
     enter_and_update
         .attr("width", escalaBarras.bandwidth())
-        .attr("fill", "#b58863")  
+        .attr("fill", "#b58863")
         .attr("height", (d) => escalaAltura(d.length)) //Aplicamos nuestra escala
         .attr("y", (d) => escalaEjeY(d.length)) //Aplicamos nuestra escala
         .attr("x", (d) => escalaBarras(avg_rating(d)))
@@ -98,7 +98,12 @@ function brushed(event, escalaBarras, datos) {
             .join("rect");
         enter_and_update
             .attr("width", escalaBarras1.bandwidth())
-            .attr("fill", "#b58863")
+            .attr("fill", (d) => {
+                if (minMaxInElosRange(d.min, d.max)) {
+                    return "red";
+                    }
+                return "#b58863";
+                })
             .attr("height", (d) => escalaAltura(d.length)) //Aplicamos nuestra escala
             .attr("y", (d) => escalaEjeY(d.length)) //Aplicamos nuestra escala
             .attr("x", (d) => escalaBarras1(avg_rating(d)))

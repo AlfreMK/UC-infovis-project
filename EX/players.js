@@ -1,30 +1,59 @@
 
 const containerPlayers = playersContainer.append("div")
-
+containerPlayers.attr("class", "container")
 
 function dataJoinPlayers(datos) {
     // Vinculamos los datos con cada elemento rect con el comando join
     maximo = d3.max(datos, d => d.rating_standard);
     minimo = d3.min(datos, d => d.rating_standard);
-    containerPlayers
-        .attr("class", "container")
     const escalaAltura = d3.scaleLinear()
         .domain([minimo, maximo])
         .rangeRound([70, 150])
 
     const enter_and_update = containerPlayers
-        .selectAll("div")
+        .selectAll("svg")
         .data(datos)
-        .join("div");
-    kingsvg(enter_and_update, escalaAltura);
+        .join(
+            enter => {
+            // if the element does not exist, we create it
+            kingsvg(enter, escalaAltura)
+            }
+            ,
+
+            update => 
+                {
+                    // select by class
+                    update.selectAll("rect")
+                        .transition()
+                        .duration(1000)
+                    update.selectAll("rect").select(".updatable-height")
+                        .attr("height", d => escalaAltura(d.rating_standard))
+                        .attr("y", d => posicionRect(d, escalaAltura));
+                    update.selectAll("rect").select(".updatable-20")
+                        .attr("y", d => posicionRect(d, escalaAltura) - 20);
+                    update.selectAll("rect").select(".updatable-12")
+                        .attr("y", d => posicionRect(d, escalaAltura) - 12);
+                    // update.selectAll("rect").select(".updatable+20")
+                    //     .attr("y", d => posicionRect(d, escalaAltura) + 20);
+                    // update.selectAll("rect").select(".updatable+25")
+                    //     .attr("y", d => posicionRect(d, escalaAltura) + 25);
+                    update.selectAll("rect").select(".updatable2-5")
+                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) - 5);
+                    update.selectAll("rect").select(".updatable2-15")
+                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) - 15);
+                    update.selectAll("rect").select(".updatable2-20")
+                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) - 20);
+                    // update.selectAll("rect").select(".updatable2+5")
+                    //     .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) + 5);
+                    // update.selectAll("rect").select(".updatable2+50")
+                    //     .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) + 50);
+                }
+                ,
+                exit => exit.remove()
+
+        );
+
     // tooltip(enter_and_update);
-    enter_and_update.on("mouseover", function(d) {
-        d3.selectAll(".king").style("opacity", "0.6");
-        d3.select(this).select(".king").style("opacity", "1");
-    })
-    .on("mouseout", function(d) { 
-        d3.selectAll(".king").style("opacity", "1");
-    });
     
 }
 
@@ -52,10 +81,18 @@ function kingsvg(svg, escalaAltura){
     const rey = svg.append("svg")
         .attr("width", 100).attr("class", "king").attr("style", "cursor: pointer;")
         .attr("height", 200)
-    
+    rey.on("mouseover", function(d) {
+        d3.selectAll(".king").style("opacity", "0.6");
+        d3.select(this).style("opacity", "1");
+    })
+    .on("mouseout", function(d) { 
+        d3.selectAll(".king").style("opacity", "1");
+    })
+
     rey.append("title").text(d => textTooltip(d))
     
     rey.append("rect")
+        .attr("class", "updatable-height")
         .attr("width", 20)
         .attr("height", (d) => escalaAltura(d.rating_standard))
         .attr("fill", color)
@@ -63,12 +100,14 @@ function kingsvg(svg, escalaAltura){
         .attr("y", (d) => posicionRect(d, escalaAltura))
         
     rey.append("rect")
+        .attr("class", "updatable-20")
         .attr("width", 5)
         .attr("height", 20)
         .attr("fill", color)
         .attr("x", posicionXrect(7.5))
         .attr("y", (d, i) => posicionRect(d, escalaAltura) - 20);
     rey.append("rect")
+        .attr("class", "updatable-12")
         .attr("width", 20)
         .attr("height", 5)
         .attr("fill", color)
@@ -77,17 +116,20 @@ function kingsvg(svg, escalaAltura){
     
     // cuello del rey
     rey.append("polygon")
+        .attr("class", "updatable-20")
         .attr("points", (d) => `${posicionXrect(-5)},${posicionRect(d, escalaAltura)} ${posicionXrect(25)},${posicionRect(d, escalaAltura)} ${posicionXrect(10)},${posicionRect(d, escalaAltura)+60}`)
         .attr("fill", color)
         .attr("x", posicionXrect(-5))
         .attr("y", (d, i) => posicionRect(d, escalaAltura) - 20);
     rey.append("rect")
+        .attr("class", "updatable+20")
         .attr("width", 40)
         .attr("height", 5)
         .attr("fill", color)
         .attr("x", posicionXrect(-10))
         .attr("y", (d, i) => posicionRect(d, escalaAltura) + 20);
     rey.append("rect")
+        .attr("class", "updatable+25")
         .attr("width", 30)
         .attr("height", 5)
         .attr("fill", color)
@@ -96,18 +138,21 @@ function kingsvg(svg, escalaAltura){
     
     // base del rey
     rey.append("rect")
+        .attr("class", "updatable2-5")
         .attr("width", 40)
         .attr("height", 5)
         .attr("fill", color)
         .attr("x", posicionXrect(-10))
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)- 5);
     rey.append("rect")
+        .attr("class", "updatable2-15")
         .attr("width", 35)
         .attr("height", 15)
         .attr("fill", color)
         .attr("x", posicionXrect(-7.5))
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)- 15);
     rey.append("rect")
+    .attr("class", "updatable2-20")
         .attr("width", 30)
         .attr("height", 5)
         .attr("fill", color)
@@ -117,9 +162,11 @@ function kingsvg(svg, escalaAltura){
         .attr("points",(d) => `${posicionXrect(-2)},${posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)-20} ${posicionXrect(22)},${posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)-20} ${posicionXrect(10)},${posicionRect(d, escalaAltura)}`)
         .attr("fill", color)
         .attr("x", posicionXrect(-5))
+        .attr("class", "updatable2-20")
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)- 20);
 
     rey.append("image")
+        .attr("class", "updatable2+5")
         .attr("xlink:href", d => flagSvg(d.federation))
         .attr("width", 25)
         .attr("height", 25)
@@ -127,6 +174,7 @@ function kingsvg(svg, escalaAltura){
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)+5);
         ;
     rey.append("text")
+        .attr("class", "updatable2+50")
         .attr("x", posicionXrect(-20))
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)+ 50)
         .text((d) => textPlayer(d.name))
@@ -146,21 +194,35 @@ function flagSvg(flag) {
     return "https://ratings.fide.com/svg/" + flag + ".svg";
 }
 
+function dataPlayersAll(data, elosRangeActivated){
+    // for range in elosRangeActivated
+    // const dataPlayers = [];
+    // for (let i = 0; i < elosRangeActivated.length; i++) {
+    //     const elosRange = elosRangeActivated[i];
+    //     const dataFiltered = data.filter(d => d.rating_standard >= elosRange[0] && d.rating_standard <= elosRange[1]);
+    //     dataPlayers.push(dataFiltered);
+    // }
+    // // do the same but with map
+    const dataPlayers = elosRangeActivated.map(
+        elosRange => data.filter(
+            d => d.rating_standard >= elosRange[0] && d.rating_standard <= elosRange[1]));
 
+    // concat all the arrays
+    return [].concat.apply([], dataPlayers);
+}
 
 function runCodePlayers() {
     // https://www.kaggle.com/datasets/rohanrao/chess-fide-ratings
     const BASE_URL = "https://gist.githubusercontent.com/AlfreMK/";
     let URL = BASE_URL + "a2ea95d3edc1de632237cd4c2ae0a8f8/raw/9ab4b21d70baa0683428e6bbd6f8262242b7e869/";
     URL = URL + "fide_data_01_2021.csv";
+
     d3.csv(URL, parseData).then((data) => {
         // sort descending
-        // query last element from array
-        const minMax = elosRangeActivated.slice(-1)[0]
-        console.log(minMax)
-        data_players = data.filter(d => d.rating_standard >= minMax[0] && d.rating_standard <= minMax[1]);
+        let data_players = dataPlayersAll(data, elosRangeActivated);
+        // let data_players = data;
         data_players = data_players.sort((a, b) => b.rating_standard - a.rating_standard);
-        data_players = data_players.slice(0, 10);
+        data_players = data_players.slice(0, 20);
         dataJoinPlayers(data_players);
     }).catch(error => {
       console.log(error);
