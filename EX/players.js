@@ -22,31 +22,55 @@ function dataJoinPlayers(datos) {
 
             update => 
                 {
-                    // select by class
-                    update.selectAll("rect")
+                    update.selectAll(".updatable-height")
                         .transition()
                         .duration(1000)
-                    update.selectAll("rect").select(".updatable-height")
                         .attr("height", d => escalaAltura(d.rating_standard))
                         .attr("y", d => posicionRect(d, escalaAltura));
-                    update.selectAll("rect").select(".updatable-20")
+                    update.selectAll(".updatable-20")
+                        .transition()
+                        .duration(1000)
                         .attr("y", d => posicionRect(d, escalaAltura) - 20);
-                    update.selectAll("rect").select(".updatable-12")
+                    update.selectAll(".updatable-12")
+                        .transition()
+                        .duration(1000)
                         .attr("y", d => posicionRect(d, escalaAltura) - 12);
-                    // update.selectAll("rect").select(".updatable+20")
-                    //     .attr("y", d => posicionRect(d, escalaAltura) + 20);
-                    // update.selectAll("rect").select(".updatable+25")
-                    //     .attr("y", d => posicionRect(d, escalaAltura) + 25);
-                    update.selectAll("rect").select(".updatable2-5")
+                    update.selectAll(".updatable--20")
+                        .transition()
+                        .duration(1000)
+                        .attr("y", d => posicionRect(d, escalaAltura) + 20);
+                    update.selectAll(".updatable--25")
+                    .transition()
+                    .duration(1000)
+                        .attr("y", d => posicionRect(d, escalaAltura) + 25);
+                    update.selectAll(".updatable2-5")
+                    .transition()
+                    .duration(1000)
                         .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) - 5);
-                    update.selectAll("rect").select(".updatable2-15")
+                    update.selectAll(".updatable2-15")
+                    .transition()
+                    .duration(1000)
                         .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) - 15);
-                    update.selectAll("rect").select(".updatable2-20")
+                    update.selectAll(".updatable2-20")
+                    .transition()
+                    .duration(1000)
                         .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) - 20);
-                    // update.selectAll("rect").select(".updatable2+5")
-                    //     .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) + 5);
-                    // update.selectAll("rect").select(".updatable2+50")
-                    //     .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) + 50);
+                    update.selectAll(".updatable2--5")
+                    .transition()
+                    .duration(1000)
+                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) + 5);
+                    update.selectAll(".updatable2--50")
+                    .transition()
+                    .duration(1000)
+                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) + 50);
+                    update.selectAll(".polygon-60")
+                    .transition()
+                    .duration(1000)
+                        .attr("points", d => polygonPoints(d, escalaAltura, 60));
+                    update.selectAll(".polygon-20")
+                    .transition()
+                    .duration(1000)
+                        .attr("points", d => polygonPoints(d, escalaAltura, -20));
                 }
                 ,
                 exit => exit.remove()
@@ -74,6 +98,14 @@ function posicionXrect(num) {
     return 40 + num
 }
 
+function polygonPoints(d, escala, integer){
+    if (integer===60){
+        return `${posicionXrect(-5)},${posicionRect(d, escala)} ${posicionXrect(25)},${posicionRect(d, escala)} ${posicionXrect(10)},${posicionRect(d, escala)+60}`
+    }
+    else if (integer===-20){
+        return `${posicionXrect(-2)},${posicionRect(d, escala)+escala(d.rating_standard)-20} ${posicionXrect(22)},${posicionRect(d, escala)+escala(d.rating_standard)-20} ${posicionXrect(10)},${posicionRect(d, escala)}`
+    }
+}
 function kingsvg(svg, escalaAltura){
     // svg del rey
     const color = "#202020";
@@ -116,20 +148,20 @@ function kingsvg(svg, escalaAltura){
     
     // cuello del rey
     rey.append("polygon")
-        .attr("class", "updatable-20")
-        .attr("points", (d) => `${posicionXrect(-5)},${posicionRect(d, escalaAltura)} ${posicionXrect(25)},${posicionRect(d, escalaAltura)} ${posicionXrect(10)},${posicionRect(d, escalaAltura)+60}`)
+        .attr("class", "updatable-20 polygon-60")
+        .attr("points", (d) => polygonPoints(d, escalaAltura, 60))
         .attr("fill", color)
         .attr("x", posicionXrect(-5))
         .attr("y", (d, i) => posicionRect(d, escalaAltura) - 20);
     rey.append("rect")
-        .attr("class", "updatable+20")
+        .attr("class", "updatable--20")
         .attr("width", 40)
         .attr("height", 5)
         .attr("fill", color)
         .attr("x", posicionXrect(-10))
         .attr("y", (d, i) => posicionRect(d, escalaAltura) + 20);
     rey.append("rect")
-        .attr("class", "updatable+25")
+        .attr("class", "updatable--25")
         .attr("width", 30)
         .attr("height", 5)
         .attr("fill", color)
@@ -159,14 +191,14 @@ function kingsvg(svg, escalaAltura){
         .attr("x", posicionXrect(-5))
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)- 20);
     rey.append("polygon")
-        .attr("points",(d) => `${posicionXrect(-2)},${posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)-20} ${posicionXrect(22)},${posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)-20} ${posicionXrect(10)},${posicionRect(d, escalaAltura)}`)
+        .attr("points",(d) => polygonPoints(d, escalaAltura, -20))
         .attr("fill", color)
         .attr("x", posicionXrect(-5))
-        .attr("class", "updatable2-20")
+        .attr("class", "updatable2-20 polygon-20")
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)- 20);
 
     rey.append("image")
-        .attr("class", "updatable2+5")
+        .attr("class", "updatable2--5")
         .attr("xlink:href", d => flagSvg(d.federation))
         .attr("width", 25)
         .attr("height", 25)
@@ -174,7 +206,7 @@ function kingsvg(svg, escalaAltura){
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)+5);
         ;
     rey.append("text")
-        .attr("class", "updatable2+50")
+        .attr("class", "updatable2--50")
         .attr("x", posicionXrect(-20))
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)+ 50)
         .text((d) => textPlayer(d.name))
