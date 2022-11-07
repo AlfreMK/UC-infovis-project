@@ -147,14 +147,6 @@ function flagSvg(flag) {
 }
 
 
-function maxMinInElosRange(){
-    // get max and min from elosRangeActivated
-    
-
-    const min = 2800
-    const max = 3000
-    return [min, max]
-}
 
 function runCodePlayers() {
     // https://www.kaggle.com/datasets/rohanrao/chess-fide-ratings
@@ -163,7 +155,8 @@ function runCodePlayers() {
     URL = URL + "fide_data_01_2021.csv";
     d3.csv(URL, parseData).then((data) => {
         // sort descending
-        const minMax = maxMinInElosRange();
+        // query last element from array
+        const minMax = elosRangeActivated.slice(-1)[0]
         console.log(minMax)
         data_players = data.filter(d => d.rating_standard >= minMax[0] && d.rating_standard <= minMax[1]);
         data_players = data_players.sort((a, b) => b.rating_standard - a.rating_standard);
