@@ -3,6 +3,7 @@ const mainContainer = d3.select("#main-container");
 const playersContainer = d3.select("#players-container");
 const svgDataInBrush = d3.select("#data-in-brush");
 const elosRangeActivated = [];
+const elosRangeActivatedFront = [];
 
 function dataJoinGraph(datos) {
     const container = d3.select("#main-svg");
@@ -99,7 +100,7 @@ function brushed(event, escalaBarras, datos) {
         enter_and_update
             .attr("width", escalaBarras1.bandwidth())
             .attr("fill", (d) => {
-                if (minMaxInElosRange(d.min, d.max)) {
+                if (minMaxInElosRange(elosRangeActivatedFront, d.min, d.max)) {
                     return "red";
                     }
                 return "#b58863";
@@ -113,19 +114,22 @@ function brushed(event, escalaBarras, datos) {
             })
 
             .on("mouseout", function(event, d) {
-                if (!minMaxInElosRange(d.min, d.max)) {
+                if (!minMaxInElosRange(elosRangeActivatedFront, d.min, d.max)) {
                     d3.select(this).attr("fill", "#b58863");
                 }
             })
             .on("click", function(event, d) {
-                if (updateMinMaxElo(d.min, d.max)===true) {
+                d.min = Math.floor(d.min);
+                d.max = Math.ceil(d.max);
+                if (updateMinMaxElo(elosRangeActivatedFront, d.min, d.max)) {
                     d3.select(this).attr("fill", "red");
+                    runCodePlayers(d.min, d.max, true);
                 }
                 else {
                     d3.select(this).attr("fill", "#b58863");
+                    removePlayersinCurrent(d.min, d.max);
                 }
-                runCodePlayers();
-                
+                console.log(elosRangeActivatedFront);
             })
             // cursor pointer
             .style("cursor", "pointer")
@@ -158,23 +162,23 @@ function brushed(event, escalaBarras, datos) {
 }
 
 
-function minMaxInElosRange(min, max) {
-    const index = elosRangeActivated.findIndex(elo => elo[0] == min && elo[1] == max);
+function minMaxInElosRange(elos, min, max) {
+    const index = elos.findIndex(elo => elo[0] == min && elo[1] == max);
     if (index === -1) {
         return false;
     }
     return true;
 }
 
-function updateMinMaxElo(minim, maxim){
+function updateMinMaxElo(elos, minim, maxim){
     // if [minim, maxim] in elosRangeActivated pop it
     // else push it
-    if (minMaxInElosRange(minim, maxim)) {
-        const index = elosRangeActivated.findIndex(elo => elo[0] == minim && elo[1] == maxim);
-        elosRangeActivated.splice(index, 1);
+    if (minMaxInElosRange(elos, minim, maxim)) {
+        const index = elos.findIndex(elo => elo[0] == minim && elo[1] == maxim);
+        elos.splice(index, 1);
         return false;
     }
-    elosRangeActivated.push([minim, maxim]);
+    elos.push([minim, maxim]);
     return true;
 }
 

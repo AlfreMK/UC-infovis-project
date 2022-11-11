@@ -1,11 +1,12 @@
 
+var CURRENT_PLAYERS_SHOWN = [];
 const containerPlayers = playersContainer.append("div")
 containerPlayers.attr("class", "container")
 
-function dataJoinPlayers(datos) {
+function dataJoinPlayers(datos, minim, maxim) {
     // Vinculamos los datos con cada elemento rect con el comando join
-    maximo = d3.max(datos, d => d.rating_standard);
-    minimo = d3.min(datos, d => d.rating_standard);
+    let maximo = d3.max(datos, d => d.rating_standard);
+    let minimo = d3.min(datos, d => d.rating_standard);
     const escalaAltura = d3.scaleLinear()
         .domain([minimo, maximo])
         .rangeRound([70, 150])
@@ -16,7 +17,7 @@ function dataJoinPlayers(datos) {
         .join(
             enter => {
             // if the element does not exist, we create it
-            kingsvg(enter, escalaAltura)
+            kingsvg(enter, escalaAltura, minim, maxim);
             }
             ,
 
@@ -76,7 +77,8 @@ function dataJoinPlayers(datos) {
                 exit => exit.remove()
 
         );
-
+        
+        
     // tooltip(enter_and_update);
     
 }
@@ -106,12 +108,12 @@ function polygonPoints(d, escala, integer){
         return `${posicionXrect(-2)},${posicionRect(d, escala)+escala(d.rating_standard)-20} ${posicionXrect(22)},${posicionRect(d, escala)+escala(d.rating_standard)-20} ${posicionXrect(10)},${posicionRect(d, escala)}`
     }
 }
-function kingsvg(svg, escalaAltura){
+function kingsvg(svg, escalaAltura, minim, maxim) {
     // svg del rey
     const color = "#202020";
     // tronco del rey
     const rey = svg.append("svg")
-        .attr("width", 100).attr("class", "king").attr("style", "cursor: pointer;")
+        .attr("width", 100).attr("class", `king minmax-${minim}-${maxim}`).attr("style", "cursor: pointer;")
         .attr("height", 200)
     rey.on("mouseover", function(d) {
         d3.selectAll(".king").style("opacity", "0.6");
@@ -243,7 +245,29 @@ function dataPlayersAll(data, elosRangeActivated){
     return [].concat.apply([], dataPlayers);
 }
 
-function runCodePlayers() {
+function appendPlayerstoCurrent(data, minim, maxim){
+    if (!minMaxInElosRange(elosRangeActivated, minim, maxim)){
+        CURRENT_PLAYERS_SHOWN.push(...data.filter(d => d.rating_standard >= minim && d.rating_standard <= maxim));
+        updateMinMaxElo(elosRangeActivated, minim, maxim);
+    }
+}
+
+function removePlayersinCurrent(minim, maxim){
+    CURRENT_PLAYERS_SHOWN = CURRENT_PLAYERS_SHOWN.filter(d => d.rating_standard > minim && d.rating_standard > maxim || d.rating_standard < minim && d.rating_standard < maxim);
+    // remove data from svg
+    // exit data
+    
+    // remove data from svg
+    console.log(CURRENT_PLAYERS_SHOWN)
+    d3.selectAll(`.minmax-${minim}-${maxim}`).exit();
+    d3.selectAll(`.minmax-${minim}-${maxim}`)
+        .transition()
+        .duration(1000)
+        .style("opacity", 0).remove()
+    updateMinMaxElo(elosRangeActivated, minim, maxim);
+}
+
+function runCodePlayers(minim, maxim) {
     // https://www.kaggle.com/datasets/rohanrao/chess-fide-ratings
     const BASE_URL = "https://gist.githubusercontent.com/AlfreMK/";
     let URL = BASE_URL + "a2ea95d3edc1de632237cd4c2ae0a8f8/raw/9ab4b21d70baa0683428e6bbd6f8262242b7e869/";
@@ -251,11 +275,11 @@ function runCodePlayers() {
 
     d3.csv(URL, parseData).then((data) => {
         // sort descending
-        let data_players = dataPlayersAll(data, elosRangeActivated);
+        // let data_players = dataPlayersAll(data, elosRangeActivated);
         // let data_players = data;
-        data_players = data_players.sort((a, b) => b.rating_standard - a.rating_standard);
-        data_players = data_players.slice(0, 20);
-        dataJoinPlayers(data_players);
+        // data_players = data_players.sort((a, b) => b.rating_standard - a.rating_standard);
+        appendPlayerstoCurrent(data, minim, maxim);
+        dataJoinPlayers(CURRENT_PLAYERS_SHOWN, minim, maxim);
     }).catch(error => {
       console.log(error);
     })
