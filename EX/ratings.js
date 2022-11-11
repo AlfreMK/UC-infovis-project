@@ -198,8 +198,8 @@ function avg_rating(data){
 
 function divide_players_into_ranges(data){
     let ranges = [];
-    let range = [];
-    data = data.filter((d) => ratingShown(d) !== 0);
+    // to do: filtrar por paises
+    data = data.filter((d) => ratingShown(d) !== 0 && CURRENT_FILTER[d.gender] && isFedShown(d));
     let maximo = d3.max(data, d => ratingShown(d));
     let minimo = d3.min(data, d => ratingShown(d));
     let num_ranges = 30;
@@ -244,7 +244,15 @@ const parseData = (d) => ({
     yob: parseInt(d.yob),
   });
 
-
+function removeAllD3() {
+    d3.selectAll("rect").remove();
+    d3.selectAll("g").remove();
+    d3.selectAll(`.king`).exit();
+    d3.selectAll(`.king`)
+        .transition()
+        .duration(1000)
+        .style("opacity", 0).remove()
+}
 
 function runCode() {
     // https://www.kaggle.com/datasets/rohanrao/chess-fide-ratings
@@ -252,7 +260,7 @@ function runCode() {
     let URL = BASE_URL + "a2ea95d3edc1de632237cd4c2ae0a8f8/raw/9ab4b21d70baa0683428e6bbd6f8262242b7e869/";
     URL = URL + "fide_data_01_2021.csv";
     d3.csv(URL, parseData).then((data) => {
-        // sort descending
+        removeAllD3();     
         data = divide_players_into_ranges(data);
         data = data.sort((a, b) => a.min - b.min);
         dataJoinGraph(data);
@@ -262,4 +270,20 @@ function runCode() {
   }
 
 
-runCode();
+
+function showCountriesSelect(){
+    let url = "https://restcountries.com/v2/all?fields=name,cioc";
+    d3.json(url).then((data) => {
+      const select = document.getElementById("selector-federation");
+      data.forEach(country => {
+        const option = document.createElement("option");
+        option.value = country.cioc;
+        option.text = country.name;
+        select.appendChild(option);
+    });
+}).catch(error => {
+    console.log(error);
+    })
+}
+
+showCountriesSelect();

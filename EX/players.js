@@ -251,7 +251,10 @@ function dataPlayersAll(data, elosRangeActivated){
 
 function appendPlayerstoCurrent(data, minim, maxim){
     if (!minMaxInElosRange(elosRangeActivated, minim, maxim)){
-        let data_players = data.filter(d => ratingShown(d) >= minim && ratingShown(d) <= maxim);
+        let data_players = data.filter(d => ratingShown(d) >= minim 
+                                            && ratingShown(d) <= maxim
+                                            && CURRENT_FILTER[d.gender]
+                                            && isFedShown(d));
         data_players = data_players.sort(() => Math.random() - 0.5).slice(0, 10);
         CURRENT_PLAYERS_SHOWN.push(...data_players);
         updateMinMaxElo(elosRangeActivated, minim, maxim);
@@ -273,7 +276,8 @@ function sortPlayers(){
 }
 
 function removePlayersinCurrent(minim, maxim){
-    CURRENT_PLAYERS_SHOWN = CURRENT_PLAYERS_SHOWN.filter(d => ratingShown(d) > minim && ratingShown(d) > maxim || ratingShown(d) < minim && ratingShown(d) < maxim);
+    CURRENT_PLAYERS_SHOWN = CURRENT_PLAYERS_SHOWN.filter(d => ratingShown(d) > minim && ratingShown(d) > maxim
+                                                        || ratingShown(d) < minim && ratingShown(d) < maxim);
     d3.selectAll(`.minmax-${minim}-${maxim}`).exit();
     d3.selectAll(`.minmax-${minim}-${maxim}`)
         .transition()

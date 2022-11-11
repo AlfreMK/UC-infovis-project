@@ -21,13 +21,20 @@
             </select>
         </div>
         <div>
-            <input type="checkbox" id="checkbox-female" checked onclick="">
+            <input type="checkbox" id="checkbox-female" checked onclick="filterChangeGender(1)">
             Female
             </input>
-            <input type="checkbox" id="checkbox-male" checked onclick="">
+            <input type="checkbox" id="checkbox-male" checked onclick="filterChangeGender(2)">
             Male
             </input>
         </div>
+        <div>
+            Federación
+            <select id="selector-federation" onchange="filterChangeFed()">
+                <option value="ALL">All Countries</option>
+            </select>
+        </div>
+        <button onclick="runCode()">Visualizar</button>
     </div>
     <span>♔♕♖♗♘♙♚♛♜♝♞♟︎</span>
     <h3>
