@@ -19,6 +19,8 @@ body{
     /* color: rgb(55,59,62);  */
     background-color: #f0d9b5;
     padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
     border-radius: 10px;
 }
 svg{

@@ -199,8 +199,9 @@ function avg_rating(data){
 function divide_players_into_ranges(data){
     let ranges = [];
     let range = [];
-    let maximo = d3.max(data, d => d.rating_standard);
-    let minimo = d3.min(data, d => d.rating_standard);
+    data = data.filter((d) => ratingShown(d) !== 0);
+    let maximo = d3.max(data, d => ratingShown(d));
+    let minimo = d3.min(data, d => ratingShown(d));
     let num_ranges = 30;
     let range_size = (maximo - minimo) / num_ranges;
 
@@ -215,7 +216,7 @@ function divide_players_into_ranges(data){
             let maximum = minimo + (i + 1) * range_size;
             ranges.push(
                 data.filter(
-                    (d) => d.rating_standard >= minimum && d.rating_standard < maximum
+                    (d) => ratingShown(d) >= minimum && ratingShown(d) < maximum
                 )
             );
         }

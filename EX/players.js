@@ -5,8 +5,8 @@ containerPlayers.attr("class", "container")
 
 function dataJoinPlayers(datos, minim, maxim) {
     // Vinculamos los datos con cada elemento rect con el comando join
-    let maximo = d3.max(datos, d => d.rating_standard);
-    let minimo = d3.min(datos, d => d.rating_standard);
+    let maximo = d3.max(datos, d => ratingShown(d));
+    let minimo = d3.min(datos, d => ratingShown(d));
     const escalaAltura = d3.scaleLinear()
         .domain([minimo, maximo])
         .rangeRound([70, 150])
@@ -26,7 +26,7 @@ function dataJoinPlayers(datos, minim, maxim) {
                     update.selectAll(".updatable-height")
                         .transition()
                         .duration(1000)
-                        .attr("height", d => escalaAltura(d.rating_standard))
+                        .attr("height", d => escalaAltura(ratingShown(d)))
                         .attr("y", d => posicionRect(d, escalaAltura));
                     update.selectAll(".updatable-20")
                         .transition()
@@ -47,23 +47,23 @@ function dataJoinPlayers(datos, minim, maxim) {
                     update.selectAll(".updatable2-5")
                     .transition()
                     .duration(1000)
-                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) - 5);
+                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(ratingShown(d)) - 5);
                     update.selectAll(".updatable2-15")
                     .transition()
                     .duration(1000)
-                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) - 15);
+                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(ratingShown(d)) - 15);
                     update.selectAll(".updatable2-20")
                     .transition()
                     .duration(1000)
-                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) - 20);
+                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(ratingShown(d)) - 20);
                     update.selectAll(".updatable2--5")
                     .transition()
                     .duration(1000)
-                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) + 5);
+                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(ratingShown(d)) + 5);
                     update.selectAll(".updatable2--50")
                     .transition()
                     .duration(1000)
-                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(d.rating_standard) + 50);
+                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(ratingShown(d)) + 50);
                     update.selectAll(".polygon-60")
                     .transition()
                     .duration(1000)
@@ -93,7 +93,7 @@ function textTooltip(data) {
 
 
 function posicionRect(d, escala) {
-    return 154-escala(d.rating_standard)
+    return 154-escala(ratingShown(d))
 }
 
 function posicionXrect(num) {
@@ -105,7 +105,7 @@ function polygonPoints(d, escala, integer){
         return `${posicionXrect(-5)},${posicionRect(d, escala)} ${posicionXrect(25)},${posicionRect(d, escala)} ${posicionXrect(10)},${posicionRect(d, escala)+60}`
     }
     else if (integer===-20){
-        return `${posicionXrect(-2)},${posicionRect(d, escala)+escala(d.rating_standard)-20} ${posicionXrect(22)},${posicionRect(d, escala)+escala(d.rating_standard)-20} ${posicionXrect(10)},${posicionRect(d, escala)}`
+        return `${posicionXrect(-2)},${posicionRect(d, escala)+escala(ratingShown(d))-20} ${posicionXrect(22)},${posicionRect(d, escala)+escala(ratingShown(d))-20} ${posicionXrect(10)},${posicionRect(d, escala)}`
     }
 }
 function kingsvg(svg, escalaAltura, minim, maxim) {
@@ -113,8 +113,12 @@ function kingsvg(svg, escalaAltura, minim, maxim) {
     const color = "#202020";
     // tronco del rey
     const rey = svg.append("svg")
-        .attr("width", 100).attr("class", `king minmax-${minim}-${maxim}`).attr("style", "cursor: pointer;")
-        .attr("height", 200)
+        .attr("width", 100)
+        .attr("height", 240)
+        .attr("class", `king minmax-${minim}-${maxim}`)
+        .attr("id", d => "fid-"+ratingShown(d))
+        .attr("style", "cursor: pointer;")
+
     rey.on("mouseover", function(d) {
         d3.selectAll(".king").style("opacity", "0.6");
         d3.select(this).style("opacity", "1");
@@ -128,7 +132,7 @@ function kingsvg(svg, escalaAltura, minim, maxim) {
     rey.append("rect")
         .attr("class", "updatable-height")
         .attr("width", 20)
-        .attr("height", (d) => escalaAltura(d.rating_standard))
+        .attr("height", (d) => escalaAltura(ratingShown(d)))
         .attr("fill", color)
         .attr("x", posicionXrect(0))
         .attr("y", (d) => posicionRect(d, escalaAltura))
@@ -177,27 +181,27 @@ function kingsvg(svg, escalaAltura, minim, maxim) {
         .attr("height", 5)
         .attr("fill", color)
         .attr("x", posicionXrect(-10))
-        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)- 5);
+        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))- 5);
     rey.append("rect")
         .attr("class", "updatable2-15")
         .attr("width", 35)
         .attr("height", 15)
         .attr("fill", color)
         .attr("x", posicionXrect(-7.5))
-        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)- 15);
+        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))- 15);
     rey.append("rect")
     .attr("class", "updatable2-20")
         .attr("width", 30)
         .attr("height", 5)
         .attr("fill", color)
         .attr("x", posicionXrect(-5))
-        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)- 20);
+        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))- 20);
     rey.append("polygon")
         .attr("points",(d) => polygonPoints(d, escalaAltura, -20))
         .attr("fill", color)
         .attr("x", posicionXrect(-5))
         .attr("class", "updatable2-20 polygon-20")
-        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)- 20);
+        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))- 20);
 
     rey.append("image")
         .attr("class", "updatable2--5")
@@ -205,12 +209,12 @@ function kingsvg(svg, escalaAltura, minim, maxim) {
         .attr("width", 25)
         .attr("height", 25)
         .attr("x", posicionXrect(-2.5))
-        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)+5);
+        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))+5);
         ;
     rey.append("text")
         .attr("class", "updatable2--50")
         .attr("x", posicionXrect(-20))
-        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(d.rating_standard)+ 50)
+        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))+ 50)
         .text((d) => textPlayer(d.name))
 
 }
@@ -233,13 +237,13 @@ function dataPlayersAll(data, elosRangeActivated){
     // const dataPlayers = [];
     // for (let i = 0; i < elosRangeActivated.length; i++) {
     //     const elosRange = elosRangeActivated[i];
-    //     const dataFiltered = data.filter(d => d.rating_standard >= elosRange[0] && d.rating_standard <= elosRange[1]);
+    //     const dataFiltered = data.filter(d => ratingShown(d) >= elosRange[0] && ratingShown(d) <= elosRange[1]);
     //     dataPlayers.push(dataFiltered);
     // }
     // // do the same but with map
     const dataPlayers = elosRangeActivated.map(
         elosRange => data.filter(
-            d => d.rating_standard >= elosRange[0] && d.rating_standard <= elosRange[1]));
+            d => ratingShown(d) >= elosRange[0] && ratingShown(d) <= elosRange[1]));
 
     // concat all the arrays
     return [].concat.apply([], dataPlayers);
@@ -247,25 +251,38 @@ function dataPlayersAll(data, elosRangeActivated){
 
 function appendPlayerstoCurrent(data, minim, maxim){
     if (!minMaxInElosRange(elosRangeActivated, minim, maxim)){
-        CURRENT_PLAYERS_SHOWN.push(...data.filter(d => d.rating_standard >= minim && d.rating_standard <= maxim));
+        let data_players = data.filter(d => ratingShown(d) >= minim && ratingShown(d) <= maxim);
+        data_players = data_players.sort(() => Math.random() - 0.5).slice(0, 10);
+        CURRENT_PLAYERS_SHOWN.push(...data_players);
         updateMinMaxElo(elosRangeActivated, minim, maxim);
     }
 }
 
+
+function sortPlayers(){
+    d3.selectAll(".king")
+        .datum(function() { 
+            return this.id.split("-")[1]; })
+        .sort(function(a, b) {
+            return b - a;
+            // return CURRENT_PLAYERS_SHOWN.findIndex(d => d.fide_id === a) - CURRENT_PLAYERS_SHOWN.findIndex(d => d.fide_id === b);
+        })
+        .transition()
+        .styleTween("transform", function() { return d3.interpolate("scale(0)", "scale(1)"); })
+        .duration(1000);
+}
+
 function removePlayersinCurrent(minim, maxim){
-    CURRENT_PLAYERS_SHOWN = CURRENT_PLAYERS_SHOWN.filter(d => d.rating_standard > minim && d.rating_standard > maxim || d.rating_standard < minim && d.rating_standard < maxim);
-    // remove data from svg
-    // exit data
-    
-    // remove data from svg
-    console.log(CURRENT_PLAYERS_SHOWN)
+    CURRENT_PLAYERS_SHOWN = CURRENT_PLAYERS_SHOWN.filter(d => ratingShown(d) > minim && ratingShown(d) > maxim || ratingShown(d) < minim && ratingShown(d) < maxim);
     d3.selectAll(`.minmax-${minim}-${maxim}`).exit();
     d3.selectAll(`.minmax-${minim}-${maxim}`)
         .transition()
         .duration(1000)
         .style("opacity", 0).remove()
     updateMinMaxElo(elosRangeActivated, minim, maxim);
+    // dataJoinPlayers(CURRENT_PLAYERS_SHOWN, minim, maxim);
 }
+
 
 function runCodePlayers(minim, maxim) {
     // https://www.kaggle.com/datasets/rohanrao/chess-fide-ratings
@@ -274,12 +291,9 @@ function runCodePlayers(minim, maxim) {
     URL = URL + "fide_data_01_2021.csv";
 
     d3.csv(URL, parseData).then((data) => {
-        // sort descending
-        // let data_players = dataPlayersAll(data, elosRangeActivated);
-        // let data_players = data;
-        // data_players = data_players.sort((a, b) => b.rating_standard - a.rating_standard);
         appendPlayerstoCurrent(data, minim, maxim);
         dataJoinPlayers(CURRENT_PLAYERS_SHOWN, minim, maxim);
+        sortPlayers();
     }).catch(error => {
       console.log(error);
     })
