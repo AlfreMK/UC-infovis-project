@@ -72,6 +72,7 @@ function dataJoinGraph(datos) {
 }
 
 function brushed(event, escalaBarras, datos) {
+    const color_selected = "red"
     const selection = event.selection; 
     if (selection) {
         const filteredData = datos.filter(d => {
@@ -101,7 +102,7 @@ function brushed(event, escalaBarras, datos) {
             .attr("width", escalaBarras1.bandwidth())
             .attr("fill", (d) => {
                 if (minMaxInElosRange(elosRangeActivatedFront, d.min, d.max)) {
-                    return "red";
+                    return color_selected;
                     }
                 return "#b58863";
                 })
@@ -110,7 +111,7 @@ function brushed(event, escalaBarras, datos) {
             .attr("x", (d) => escalaBarras1(avg_rating(d)))
             // add hover
             .on("mouseover", function(event, d) {
-                d3.select(this).attr("fill", "red");
+                d3.select(this).attr("fill", color_selected);
             })
 
             .on("mouseout", function(event, d) {
@@ -122,14 +123,13 @@ function brushed(event, escalaBarras, datos) {
                 d.min = Math.floor(d.min);
                 d.max = Math.ceil(d.max);
                 if (updateMinMaxElo(elosRangeActivatedFront, d.min, d.max)) {
-                    d3.select(this).attr("fill", "red");
+                    d3.select(this).attr("fill", color_selected);
                     runCodePlayers(d.min, d.max, true);
                 }
                 else {
                     d3.select(this).attr("fill", "#b58863");
                     removePlayersinCurrent(d.min, d.max);
                 }
-                console.log(elosRangeActivatedFront);
             })
             // cursor pointer
             .style("cursor", "pointer")

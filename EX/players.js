@@ -16,15 +16,18 @@ function dataJoinPlayers(datos, minim, maxim) {
         .data(datos)
         .join(
             enter => {
-                if (enter.gender === "M"){
-                    kingsvg(enter, escalaAltura, minim, maxim);
-                }
-                else{
-                    queensvg(enter, escalaAltura, minim, maxim);
-                }
-            }
-            ,
+                enter._groups.map((d) => {
+                    d.map((e) => {
+                        if (e.__data__.gender == "M") {
+                            kingsvg(d3.select(e), escalaAltura, minim, maxim)
+                        } else {
+                            queensvg(d3.select(e), escalaAltura, minim, maxim)
+                        }
 
+                    })
+                }
+                )
+            },
             update => 
                 {
                     update.selectAll(".updatable-height")
@@ -76,6 +79,22 @@ function dataJoinPlayers(datos, minim, maxim) {
                     .transition()
                     .duration(1000)
                         .attr("points", d => polygonPoints(d, escalaAltura, -20));
+                    update.selectAll(".polygon-1")
+                    .transition()
+                    .duration(1000)
+                        .attr("points", d => polygonPointsQueen(d, escalaAltura, 1));
+                    update.selectAll(".polygon-2")
+                    .transition()
+                    .duration(1000)
+                        .attr("points", d => polygonPointsQueen(d, escalaAltura, 2));
+                    update.selectAll(".polygon-3")
+                    .transition()
+                    .duration(1000)
+                        .attr("points", d => polygonPointsQueen(d, escalaAltura, 3));
+                    update.selectAll(".updatable-14")
+                    .transition()
+                    .duration(1000)
+                        .attr("cy", d => posicionRect(d, escalaAltura) - 14);
                 }
                 ,
                 exit => exit.remove()
@@ -96,26 +115,10 @@ function textTooltip(data) {
 }
 
 
-function posicionRect(d, escala) {
-    return 154-escala(ratingShown(d))
-}
 
-function posicionXrect(num) {
-    return 40 + num
-}
-
-function polygonPoints(d, escala, integer){
-    if (integer===60){
-        return `${posicionXrect(-5)},${posicionRect(d, escala)} ${posicionXrect(25)},${posicionRect(d, escala)} ${posicionXrect(10)},${posicionRect(d, escala)+60}`
-    }
-    else if (integer===-20){
-        return `${posicionXrect(-2)},${posicionRect(d, escala)+escala(ratingShown(d))-20} ${posicionXrect(22)},${posicionRect(d, escala)+escala(ratingShown(d))-20} ${posicionXrect(10)},${posicionRect(d, escala)}`
-    }
-}
-
-function queensvg(svg, escalaAltura, minim, maxim){
+function basesvg(svg, escalaAltura, minim, maxim){
     const color = "#202020";
-    const queen = svg.append("svg")
+    const pieza = svg.append("svg")
         .attr("width", 100)
         .attr("height", 240)
         .attr("class", `king minmax-${minim}-${maxim}`)
@@ -128,45 +131,133 @@ function queensvg(svg, escalaAltura, minim, maxim){
         .on("mouseout", function(d) { 
             d3.selectAll(".king").style("opacity", "1");
         })
-    queen.append("rect")
+    pieza.append("rect")
         .attr("class", "updatable-height")
         .attr("width", 20)
         .attr("height", (d) => escalaAltura(ratingShown(d)))
         .attr("fill", color)
         .attr("x", posicionXrect(0))
         .attr("y", (d) => posicionRect(d, escalaAltura))
-    
+    pieza.append("title").text(d => textTooltip(d))
+    // base de la pieza
+    pieza.append("rect")
+        .attr("class", "updatable2-5")
+        .attr("width", 40)
+        .attr("height", 5)
+        .attr("fill", color)
+        .attr("x", posicionXrect(-10))
+        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))- 5);
+    pieza.append("rect")
+        .attr("class", "updatable2-15")
+        .attr("width", 35)
+        .attr("height", 15)
+        .attr("fill", color)
+        .attr("x", posicionXrect(-7.5))
+        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))- 15);
+        pieza.append("rect")
+    .attr("class", "updatable2-20")
+        .attr("width", 30)
+        .attr("height", 5)
+        .attr("fill", color)
+        .attr("x", posicionXrect(-5))
+        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))- 20);
+        pieza.append("polygon")
+        .attr("points",(d) => polygonPoints(d, escalaAltura, -20))
+        .attr("fill", color)
+        .attr("class", "updatable2-20 polygon-20")
+
+        pieza.append("image")
+        .attr("class", "updatable2--5")
+        .attr("xlink:href", d => flagSvg(d.federation))
+        .attr("width", 25)
+        .attr("height", 25)
+        .attr("x", posicionXrect(-2.5))
+        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))+5);
+        ;
+        pieza.append("text")
+        .attr("class", "updatable2--50")
+        .attr("x", posicionXrect(-20))
+        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))+ 50)
+        .text((d) => textPlayer(d.name))
+        // cuello de la pieza
+        pieza.append("polygon")
+        .attr("class", "updatable-20 polygon-60")
+        .attr("points", (d) => polygonPoints(d, escalaAltura, 60))
+        .attr("fill", color)
+    return pieza
+}
+
+function queensvg(svg, escalaAltura, minim, maxim){
+    const color = "#202020";
+    const queen = basesvg(svg, escalaAltura, minim, maxim);
+    queen.append("polygon")
+        .attr("points",(d) => polygonPointsQueen(d, escalaAltura, 1))
+        .attr("fill", color)
+        .attr("class", "polygon-1");
+    queen.append("polygon")
+        .attr("points",(d) => polygonPointsQueen(d, escalaAltura, 2))
+        .attr("fill", color)
+        .attr("class", "polygon-2");
+    queen.append("polygon")
+        .attr("points",(d) => polygonPointsQueen(d, escalaAltura, 3))
+        .attr("fill", color)
+        .attr("class", "polygon-3")
+    queen.append("circle")
+        .attr("class", "updatable-14")
+        .attr("cx", posicionXrect(10))
+        .attr("cy",(d) => posicionRect(d, escalaAltura)-14)
+        .attr("r", 5)
+        .attr("fill", color);
+
+    queen.append("rect")
+        .attr("class", "updatable--20")
+        .attr("width", 30)
+        .attr("height", 5)
+        .attr("fill", color)
+        .attr("x", posicionXrect(-5))
+        .attr("y", (d, i) => posicionRect(d, escalaAltura) + 20);
+    queen.append("rect")
+        .attr("class", "updatable--25")
+        .attr("width", 40)
+        .attr("height", 5)
+        .attr("fill", color)
+        .attr("x", posicionXrect(-10))
+        .attr("y", (d, i) => posicionRect(d, escalaAltura) + 25);
+}
+
+
+function posicionRect(d, escala) {
+    return 154-escala(ratingShown(d))
+}
+
+function posicionXrect(num) {
+    return 40 + num
+}
+
+function polygonPointsQueen(d, escala, num) {
+    if (num===1){
+        return `${posicionXrect(-10)},${posicionRect(d, escala)-14} ${posicionXrect(-3)},${posicionRect(d, escala)+6} ${posicionXrect(15)},${posicionRect(d, escala)+6}`
+    }
+    else if (num===2){
+        return `${posicionXrect(30)},${posicionRect(d, escala)-14} ${posicionXrect(23)},${posicionRect(d, escala)+6} ${posicionXrect(5)},${posicionRect(d, escala)+6}`
+    }
+    else if (num===3){
+        return `${posicionXrect(-3)},${posicionRect(d, escala)+6} ${posicionXrect(23)},${posicionRect(d, escala)+6} ${posicionXrect(10)},${posicionRect(d, escala)-14}`
+    }
+}
+
+function polygonPoints(d, escala, integer){
+    if (integer===60){
+        return `${posicionXrect(-5)},${posicionRect(d, escala)} ${posicionXrect(25)},${posicionRect(d, escala)} ${posicionXrect(10)},${posicionRect(d, escala)+60}`
+    }
+    else if (integer===-20){
+        return `${posicionXrect(-2)},${posicionRect(d, escala)+escala(ratingShown(d))-20} ${posicionXrect(22)},${posicionRect(d, escala)+escala(ratingShown(d))-20} ${posicionXrect(10)},${posicionRect(d, escala)}`
+    }
 }
 
 function kingsvg(svg, escalaAltura, minim, maxim) {
-    // svg del rey
     const color = "#202020";
-    // tronco del rey
-    const rey = svg.append("svg")
-        .attr("width", 100)
-        .attr("height", 240)
-        .attr("class", `king minmax-${minim}-${maxim}`)
-        .attr("id", d => "fid-"+ratingShown(d))
-        .attr("style", "cursor: pointer;")
-
-    rey.on("mouseover", function(d) {
-        d3.selectAll(".king").style("opacity", "0.6");
-        d3.select(this).style("opacity", "1");
-    })
-    .on("mouseout", function(d) { 
-        d3.selectAll(".king").style("opacity", "1");
-    })
-
-    rey.append("title").text(d => textTooltip(d))
-    
-    rey.append("rect")
-        .attr("class", "updatable-height")
-        .attr("width", 20)
-        .attr("height", (d) => escalaAltura(ratingShown(d)))
-        .attr("fill", color)
-        .attr("x", posicionXrect(0))
-        .attr("y", (d) => posicionRect(d, escalaAltura))
-        
+    const rey = basesvg(svg, escalaAltura, minim, maxim);
     rey.append("rect")
         .attr("class", "updatable-20")
         .attr("width", 5)
@@ -181,21 +272,6 @@ function kingsvg(svg, escalaAltura, minim, maxim) {
         .attr("fill", color)
         .attr("x", posicionXrect(0))
         .attr("y", (d, i) => posicionRect(d, escalaAltura) - 12);
-    
-    // cuello del rey
-    rey.append("polygon")
-        .attr("class", "updatable-20 polygon-60")
-        .attr("points", (d) => polygonPoints(d, escalaAltura, 60))
-        .attr("fill", color)
-        .attr("x", posicionXrect(-5))
-        .attr("y", (d, i) => posicionRect(d, escalaAltura) - 20);
-    rey.append("rect")
-        .attr("class", "updatable--20")
-        .attr("width", 40)
-        .attr("height", 5)
-        .attr("fill", color)
-        .attr("x", posicionXrect(-10))
-        .attr("y", (d, i) => posicionRect(d, escalaAltura) + 20);
     rey.append("rect")
         .attr("class", "updatable--25")
         .attr("width", 30)
@@ -203,50 +279,13 @@ function kingsvg(svg, escalaAltura, minim, maxim) {
         .attr("fill", color)
         .attr("x", posicionXrect(-5))
         .attr("y", (d, i) => posicionRect(d, escalaAltura) + 25);
-    
-    // base del rey
     rey.append("rect")
-        .attr("class", "updatable2-5")
+        .attr("class", "updatable--20")
         .attr("width", 40)
         .attr("height", 5)
         .attr("fill", color)
         .attr("x", posicionXrect(-10))
-        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))- 5);
-    rey.append("rect")
-        .attr("class", "updatable2-15")
-        .attr("width", 35)
-        .attr("height", 15)
-        .attr("fill", color)
-        .attr("x", posicionXrect(-7.5))
-        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))- 15);
-    rey.append("rect")
-    .attr("class", "updatable2-20")
-        .attr("width", 30)
-        .attr("height", 5)
-        .attr("fill", color)
-        .attr("x", posicionXrect(-5))
-        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))- 20);
-    rey.append("polygon")
-        .attr("points",(d) => polygonPoints(d, escalaAltura, -20))
-        .attr("fill", color)
-        .attr("x", posicionXrect(-5))
-        .attr("class", "updatable2-20 polygon-20")
-        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))- 20);
-
-    rey.append("image")
-        .attr("class", "updatable2--5")
-        .attr("xlink:href", d => flagSvg(d.federation))
-        .attr("width", 25)
-        .attr("height", 25)
-        .attr("x", posicionXrect(-2.5))
-        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))+5);
-        ;
-    rey.append("text")
-        .attr("class", "updatable2--50")
-        .attr("x", posicionXrect(-20))
-        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))+ 50)
-        .text((d) => textPlayer(d.name))
-
+        .attr("y", (d, i) => posicionRect(d, escalaAltura) + 20);
 }
 
 
