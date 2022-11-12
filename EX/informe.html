@@ -5,8 +5,90 @@
     <meta charset="utf-8">
     <title>Examen Visualización de Información</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="informe.css">
 </head>
 <body>
+<div class="main-container">
+  <h1>
+    Informe
+  </h1>
+  <article class="nivel">
+    <h2>
+      1. Primer Nivel
+    </h2>
+      <h3>
+        Contexto
+      </h3>
+      <p>
+        Los datos utilizados provienen de la base de datos de jugadores de ajedrez de la <a href="https://www.fide.com/">FIDE</a>, la Federación Internacional de Ajedrez.
+        Esta base de datos contiene información de jugadores de ajedrez de todo el mundo, y se actualiza cada mes.
+      </p>
+      <h3>Naturaleza de los datos</h3>
+        Los datos son de tipo tabular, y contienen información de jugadores con sus respectivo nombre, ratings, género, país de origen,entre otros.
+        Específicamente:
+          <li><b>fide_id</b>: Identificador del jugador</li>
+          <li><b>name</b>: Nombre del jugador</li>
+          <li><b>federation</b>: País o federación que representa el jugador. Está codificado con el código <a href="https://en.wikipedia.org/wiki/List_of_IOC_country_codes">IOC</a> respectivo (por ejemplo el de Chile es <b>CHI</b>).</li>
+          <li><b>gender</b>: Género con el que se registra el jugador (M de male y F de female).</li>
+          <li><b>title</b>: Título del jugador, puede ser FM, IM o GM (nivel de maestro)</li>
+          <li><b>yob</b>: Año de nacimiento del jugador</li>
+          <li><b>rating_standard</b>: Rating <a href="https://es.wikipedia.org/wiki/Sistema_de_puntuaci%C3%B3n_Elo">ELO</a> en ritmo clásico o estándar</li>
+          <li><b>rating_rapid</b>: Rating ELO en ritmo rápido</li>
+          <li><b>rating_blitz</b>: Rating ELO en ritmo blitz</li>
+        </ul>
+        Por ejemplo, una fila se vería así:
+        <table>
+          <tr>
+            <th>fide_id</th>
+            <th>name</th>
+            <th>federation</th>
+            <th>gender</th>
+            <th>title</th>
+            <th>yob</th>
+            <th>rating_standard</th>
+            <th>rating_rapid</th>
+            <th>rating_blitz</th>
+          </tr>
+          <tr>
+            <td>1503014</td>
+            <td>Carlsen, Magnus</td>
+            <td>NOR</td>
+            <td>M</td>
+            <td>GM</td>
+            <td>1990</td>
+            <td>2862</td>
+            <td>2881</td>
+            <td>2886</td>
+          </tr>
+        </table>
 
+      <h3>Fuente de los datos</h3>
+      <p>
+        Los datos que se utilizan en este informe son de la base de datos (de la FIDE) de enero de 2021, y fueron importadas desde
+        <a href="https://www.kaggle.com/datasets/rohanrao/chess-fide-ratings">Kaggle</a>. Luego fueron procesadas quitando jugadores sin ninguno de los ratings, o jugadores con información incompleta.
+        Los datos finales que se usaron están guardados en el siguiente <a href="https://gist.githubusercontent.com/AlfreMK/a2ea95d3edc1de632237cd4c2ae0a8f8/raw/9ab4b21d70baa0683428e6bbd6f8262242b7e869/">link</a>.
+      </p>
+      <h3>Potencial usuario y uso de la herramienta</h3>
+      <p>
+        El potencial usuario de este informe puede ser un jugador de ajedrez (no necesariamente profesional), un aficionado de los deportes, o alguien que simplemente le interese el tema y que quiera saber datos como cuáles son los mejores jugadores de ajedrez del mundo, cuáles son los mejores jugadores de su país, cuál es la distribución de jugadoras con respecto a jugadores, la diferencia en torno a cantidad, entre otras cosas.
+      </p>
+  </article>
+  <article class="nivel">
+    <h2>
+      2. Segundo Nivel
+    </h2>
+    <p>
+
+    </p>
+  </article>
+  <article class="nivel">
+    <h2>
+      3. Tercer Nivel
+    </h2>
+    <p>
+
+    </p>
+  </article>
+</div>
+  
 </body>
