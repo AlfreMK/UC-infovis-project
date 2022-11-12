@@ -50,15 +50,18 @@
             <svg id="main-svg"></svg>
                 <svg id="data-in-brush" width="435" height="345"></svg>
         </div>
-        <div id="order-players">
-            Ordenar Jugadores de:
-            <select id="selector-order" class="selector" onchange="sortPlayers()">
-                <option value="1">Mayor a menor</option>
-                <option value="2">Menor a mayor</option>
-            </select>
-        </div>
-        <div id="players-container">
-
+        <div id="players">
+            <div id="order-players">
+                Ordenar Jugadores de:
+                <select id="selector-order" class="selector" onchange="sortPlayers()">
+                    <option value="1">Mayor a menor</option>
+                    <option value="2">Menor a mayor</option>
+                </select>
+                ELO
+            </div>
+            <div id="players-container">
+                
+            </div>
         </div>
     </div>
     <script src='ratings.js' charset='utf-8'></script>

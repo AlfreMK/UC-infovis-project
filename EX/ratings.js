@@ -252,6 +252,7 @@ function removeAllD3() {
         .transition()
         .duration(1000)
         .style("opacity", 0).remove()
+    CURRENT_PLAYERS_SHOWN = [];
 }
 
 function runCode() {
