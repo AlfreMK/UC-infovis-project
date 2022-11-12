@@ -255,16 +255,32 @@ function removeAllD3() {
     CURRENT_PLAYERS_SHOWN = [];
 }
 
+function changeTextHTML(id) {
+    const element = document.getElementById(id);
+    if (element.innerHTML === "Loading data...") {
+        element.innerHTML = "";
+        element.style.display = "none";
+    }
+    else {
+        element.innerHTML = "Loading data...";
+        element.style.display = "block";
+    }
+    
+}
+
+
 function runCode() {
     // https://www.kaggle.com/datasets/rohanrao/chess-fide-ratings
     const BASE_URL = "https://gist.githubusercontent.com/AlfreMK/";
     let URL = BASE_URL + "a2ea95d3edc1de632237cd4c2ae0a8f8/raw/9ab4b21d70baa0683428e6bbd6f8262242b7e869/";
     URL = URL + "fide_data_01_2021.csv";
+    changeTextHTML("text-main");
     d3.csv(URL, parseData).then((data) => {
         removeAllD3();     
         data = divide_players_into_ranges(data);
         data = data.sort((a, b) => a.min - b.min);
         dataJoinGraph(data);
+        changeTextHTML("text-main");
     }).catch(error => {
       console.log(error);
     })

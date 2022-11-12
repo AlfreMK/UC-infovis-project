@@ -47,6 +47,9 @@
             Cantidad de personas dado su ELO Rating
         </h3>
         <div id="main-container">
+            <p class="text-not-data" id="text-main">
+                No se ha cargado el dataset aún. Presione el botón "Visualizar" para cargarlo.
+            </p>
             <svg id="main-svg"></svg>
                 <svg id="data-in-brush" width="435" height="345"></svg>
         </div>
@@ -59,8 +62,12 @@
                 </select>
                 ELO
             </div>
-            <div id="players-container">
-                
+            <p class="text-not-data" id="text-players" style="width: 300px;">
+                Presione una barra para ver jugadores que pertenezcan a esa barra.
+            </p>
+            <div class="item-players">
+                <div id="players-container">
+                </div>
             </div>
         </div>
     </div>

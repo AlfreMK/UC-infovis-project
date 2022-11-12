@@ -297,11 +297,12 @@ function runCodePlayers(minim, maxim) {
     const BASE_URL = "https://gist.githubusercontent.com/AlfreMK/";
     let URL = BASE_URL + "a2ea95d3edc1de632237cd4c2ae0a8f8/raw/9ab4b21d70baa0683428e6bbd6f8262242b7e869/";
     URL = URL + "fide_data_01_2021.csv";
-
+    changeTextHTML("text-players");
     d3.csv(URL, parseData).then((data) => {
         appendPlayerstoCurrent(data, minim, maxim);
         dataJoinPlayers(CURRENT_PLAYERS_SHOWN, minim, maxim);
         sortPlayers();
+        changeTextHTML("text-players");
     }).catch(error => {
       console.log(error);
     })
