@@ -39,6 +39,12 @@ function filterChangeGender(gender){
 
 function filterChangeFed(){
     CURRENT_FILTER["FED"] = d3.select("#selector-federation").property("value");
+    // change url of image to the flag of the federation
+    d3.select("#fed-shown")
+        .attr("xlink:href", flagSvg(CURRENT_FILTER["FED"]))
+        .attr("width", 25)
+        .attr("height", 25)
+    
 }
 
 function isFedShown(d){

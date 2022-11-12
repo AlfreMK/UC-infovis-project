@@ -216,7 +216,7 @@ function divide_players_into_ranges(data){
             let maximum = minimo + (i + 1) * range_size;
             ranges.push(
                 data.filter(
-                    (d) => ratingShown(d) >= minimum && ratingShown(d) < maximum
+                    (d) => ratingShown(d) >= minimum && ratingShown(d) <= maximum
                 )
             );
         }
@@ -278,12 +278,20 @@ function showCountriesSelect(){
       data.forEach(country => {
         const option = document.createElement("option");
         option.value = country.cioc;
-        option.text = country.name;
+        option.text = textCountry(country.name);
         select.appendChild(option);
     });
 }).catch(error => {
     console.log(error);
     })
+}
+
+
+function textCountry(name){
+    if (name.length > 20){
+        return name.substring(0, 17) + "...";
+    }
+    return name
 }
 
 showCountriesSelect();

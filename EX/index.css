@@ -33,6 +33,7 @@ svg{
     align-items: center;
     justify-content: center;
     transition: all 0.5s ease;
+    max-width: 880px;
 }
 h2, h3, span{
     color:#f0d9b5;
@@ -44,7 +45,7 @@ h2, h3, span{
     justify-content: center;
     margin: 10px;
     background-color:#f0d9b5;
-    padding: 10px;
+    padding: 50px;
     border-radius: 10px;
 }
 .container{
@@ -54,12 +55,18 @@ h2, h3, span{
     justify-content: center;
     flex-wrap: wrap;
     width: 70%;
-    margin: 50px;
+    margin-top: 50px;
     background-color: #f0d9b5; 
     /* #b58863 */
     padding: 40px;
     border-radius: 10px;
 
+}
+
+.flag-selector{
+    width: 25px;
+    height: 25px;
+    margin: 10px;
 }
 
 .tooltip{
@@ -74,4 +81,82 @@ h2, h3, span{
 .nameflag{
     display: flex;
     flex-direction: row;
+}
+
+.moac{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    background-color: #a07958;
+    padding: 50px;
+    border-radius: 10px;
+}
+
+.parent-filters{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+}
+
+/* CSS */
+/* https://getcssscan.com/css-buttons-examples */
+.button-19 {
+  background-color: #b58863;
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 20px;
+  margin: 0;
+  outline: none;
+  overflow: visible;
+  padding: 13px 16px;
+  text-align: center;
+  touch-action: manipulation;
+  transform: translateZ(0);
+  transition: filter .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 200px;
+  margin-top: 10px;
+}
+
+.button-19:after {
+  background-clip: padding-box;
+  background-color: rgb(207, 159, 119);
+  border: solid transparent;
+  border-radius: 16px;
+  border-width: 0 0 4px;
+  bottom: -4px;
+  content: "";
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -1;
+}
+
+.button-19:main,
+.button-19:focus {
+  user-select: auto;
+}
+
+.button-19:hover:not(:disabled) {
+  filter: brightness(1.1);
+  -webkit-filter: brightness(1.1);
+}
+
+.button-19:disabled {
+  cursor: auto;
 }
