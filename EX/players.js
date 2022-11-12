@@ -16,8 +16,12 @@ function dataJoinPlayers(datos, minim, maxim) {
         .data(datos)
         .join(
             enter => {
-            // if the element does not exist, we create it
-            kingsvg(enter, escalaAltura, minim, maxim);
+                if (enter.gender === "M"){
+                    kingsvg(enter, escalaAltura, minim, maxim);
+                }
+                else{
+                    queensvg(enter, escalaAltura, minim, maxim);
+                }
             }
             ,
 
@@ -108,6 +112,32 @@ function polygonPoints(d, escala, integer){
         return `${posicionXrect(-2)},${posicionRect(d, escala)+escala(ratingShown(d))-20} ${posicionXrect(22)},${posicionRect(d, escala)+escala(ratingShown(d))-20} ${posicionXrect(10)},${posicionRect(d, escala)}`
     }
 }
+
+function queensvg(svg, escalaAltura, minim, maxim){
+    const color = "#202020";
+    const queen = svg.append("svg")
+        .attr("width", 100)
+        .attr("height", 240)
+        .attr("class", `king minmax-${minim}-${maxim}`)
+        .attr("id", d => "fid-"+ratingShown(d))
+        .attr("style", "cursor: pointer;")
+        .on("mouseover", function(d) {
+            d3.selectAll(".king").style("opacity", "0.6");
+            d3.select(this).style("opacity", "1");
+        })
+        .on("mouseout", function(d) { 
+            d3.selectAll(".king").style("opacity", "1");
+        })
+    queen.append("rect")
+        .attr("class", "updatable-height")
+        .attr("width", 20)
+        .attr("height", (d) => escalaAltura(ratingShown(d)))
+        .attr("fill", color)
+        .attr("x", posicionXrect(0))
+        .attr("y", (d) => posicionRect(d, escalaAltura))
+    
+}
+
 function kingsvg(svg, escalaAltura, minim, maxim) {
     // svg del rey
     const color = "#202020";
