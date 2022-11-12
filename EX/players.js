@@ -16,8 +16,7 @@ function dataJoinPlayers(datos, minim, maxim) {
         .data(datos)
         .join(
             enter => {
-                enter._groups.map((d) => {
-                    d.map((e) => {
+                enter._groups[0].map((e) => {
                         if (e.__data__.gender == "M") {
                             kingsvg(d3.select(e), escalaAltura, minim, maxim)
                         } else {
@@ -25,8 +24,6 @@ function dataJoinPlayers(datos, minim, maxim) {
                         }
 
                     })
-                }
-                )
             },
             update => 
                 {
