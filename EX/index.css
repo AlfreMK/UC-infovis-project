@@ -27,6 +27,38 @@ svg{
     overflow: visible;
 }
 
+.filter-item{
+    padding: 5px;
+}
+
+#order-players{
+    margin-top: 50px;
+    background-color: #f0d9b5;
+    padding: 10px;
+}
+
+.selector{
+    height: 30px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#fed-shown{
+    width: 100%;
+    height: 100%;
+}
+
+#selector-federation{
+    width:150px;
+}
+
+.flag-selector{
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+}
+
+
 #players-container{
     display: flex;
     flex-direction: row;
@@ -61,12 +93,6 @@ h2, h3, span{
     padding: 40px;
     border-radius: 10px;
 
-}
-
-.flag-selector{
-    width: 25px;
-    height: 25px;
-    margin: 10px;
 }
 
 .tooltip{

@@ -13,15 +13,15 @@
         <span>♔♕♖♗♘♙♚♛♜♝♞♟︎</span>
         <div class="filters">
             <h3 style="color: black">Filtros:</h3>
-            <div>
+            <div class="filter-item">
                 Ritmo de Juego
-                <select id="selector-rating" onchange="filterChangeRating()">
+                <select id="selector-rating" class="selector" onchange="filterChangeRating()">
                     <option>Classic</option>
                     <option>Rapid</option>
                     <option>Blitz</option>
                 </select>
             </div>
-            <div>
+            <div class="filter-item">
                 <input type="checkbox" id="checkbox-female" checked onclick="filterChangeGender(1)">
                 Female
                 </input>
@@ -29,14 +29,14 @@
                 Male
                 </input>
             </div>
-            <div>
+            <div class="filter-item">
                 Federación            
-                <select id="selector-federation"style="width:150px;" onchange="filterChangeFed()">
+                <select id="selector-federation" class="selector" onchange="filterChangeFed()">
                     <option value="ALL">All Countries</option>
                 </select>
             </div>
             <svg class="flag-selector">
-                <image id="fed-shown"></image>
+                <image id="fed-shown" xlink:href="https://upload.wikimedia.org/wikipedia/en/thumb/5/5b/Fidelogo.svg/1200px-Fidelogo.svg.png"></image>
             </svg>
             <button onclick="runCode()" class="button-19">Visualizar</button>
         </div>
@@ -50,7 +50,13 @@
             <svg id="main-svg"></svg>
                 <svg id="data-in-brush" width="435" height="345"></svg>
         </div>
-
+        <div id="order-players">
+            Ordenar Jugadores de:
+            <select id="selector-order" class="selector" onchange="sortPlayers()">
+                <option value="1">Mayor a menor</option>
+                <option value="2">Menor a mayor</option>
+            </select>
+        </div>
         <div id="players-container">
 
         </div>

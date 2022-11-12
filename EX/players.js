@@ -263,10 +263,14 @@ function appendPlayerstoCurrent(data, minim, maxim){
 
 
 function sortPlayers(){
+    const select = document.getElementById("selector-order").value;
     d3.selectAll(".king")
         .datum(function() { 
             return this.id.split("-")[1]; })
         .sort(function(a, b) {
+            if (select==="2"){
+                return a-b;
+            }
             return b - a;
             // return CURRENT_PLAYERS_SHOWN.findIndex(d => d.fide_id === a) - CURRENT_PLAYERS_SHOWN.findIndex(d => d.fide_id === b);
         })
