@@ -9,39 +9,62 @@
 </head>
 <body>
     <h2> Chess Players and their Ratings</h2>
-    <div class="parent-filters">
-        <span>♔♕♖♗♘♙♚♛♜♝♞♟︎</span>
-        <div class="filters">
-            <h3 style="color: black">Filtros:</h3>
-            <div class="filter-item">
-                Ritmo de Juego
-                <select id="selector-rating" class="selector" onchange="filterChangeRating()">
-                    <option>Classic</option>
-                    <option>Rapid</option>
-                    <option>Blitz</option>
-                </select>
-            </div>
-            <div class="filter-item">
-                <input type="checkbox" id="checkbox-female" checked onclick="filterChangeGender(1)">
-                Female
-                </input>
-                <input type="checkbox" id="checkbox-male" checked onclick="filterChangeGender(2)">
-                Male
-                </input>
-            </div>
-            <div class="filter-item">
-                Federación            
-                <select id="selector-federation" class="selector" onchange="filterChangeFed()">
-                    <option value="ALL">All Countries</option>
-                </select>
-            </div>
-            <svg class="flag-selector">
-                <image id="fed-shown" xlink:href="https://upload.wikimedia.org/wikipedia/en/thumb/5/5b/Fidelogo.svg/1200px-Fidelogo.svg.png"></image>
-            </svg>
-            <button onclick="runCode()" class="button-19">Visualizar</button>
+    <span>♔♕♖♗♘♙♚♛♜♝♞♟︎♔♕♖♗♘♙♚♛♜♝♞♟︎♔♕♖♗♘♙♚♛♜♝♞♟︎♔♕♖♗♘♙♚♛♜♝♞♟︎♔♕♖♗♘♙♚♛♜♝♞♟︎</span>
+    <div class="horizontal-flex">
+        <div class="filters" style="width: 500px;">
+            <h3 class="title-context">Contextualización</h3>
+            <p>
+                La herramienta presente, permite visualizar la información de jugadores de ajedrez y sus respectivas puntuaciones (ELO rating).
+                El <a href="https://es.wikipedia.org/wiki/Sistema_de_puntuaci%C3%B3n_Elo">ELO rating</a> es un sistema de puntuación que se utiliza para medir el nivel de habilidad de los jugadores de ajedrez.
+            </p>
+            <p>
+                Hay tres <a href="https://www.chess.com/terms/chess-time-controls">tipos de ritmo de juego</a> oficiales, clásico, rápido y blitz.
+                Esto es que el tiempo de juego es diferente en cada uno de ellos, siendo el clásico el más lento y el blitz el más rápido.
+                Esto en la práctica significa que hay tres tipos de puntuaciones ELO, una para cada ritmo de juego.
+            </p>
+            <p>
+                Los <a href="https://en.wikipedia.org/wiki/FIDE_titles">títulos FIDE</a> son títulos otorgados por la Federación Internacional de Ajedrez (<a href="https://www.fide.com/">FIDE</a>) a los jugadores de ajedrez que han alcanzado un nivel de habilidad suficiente.
+                Entre algunos títulos conocidos están el de Maestro Fide (FM), Maestro Internacional (IM) y Gran Maestro (GM).
+            </p>
+            <p>
+                Los datos que se utilizan en esta herramienta son de la base de datos (de la FIDE) de enero de 2021, y fueron importadas desde
+                <a href="https://www.kaggle.com/datasets/rohanrao/chess-fide-ratings">Kaggle</a>. Luego fueron procesadas quitando jugadores sin ninguno de los ratings, o jugadores con información incompleta.
+                Los datos finales que se usaron están guardados en el siguiente <a href="https://gist.githubusercontent.com/AlfreMK/a2ea95d3edc1de632237cd4c2ae0a8f8/raw/9ab4b21d70baa0683428e6bbd6f8262242b7e869/">link</a>.
+            </p>
         </div>
-        <span>♔♕♖♗♘♙♚♛♜♝♞♟︎</span>
+        <div class="parent-filters">
+            <div class="filters">
+                <h3 style="color: black">Filtros</h3>
+                <div class="filter-item">
+                    Ritmo de Juego
+                    <select id="selector-rating" class="selector" onchange="filterChangeRating()">
+                        <option>Classic</option>
+                        <option>Rapid</option>
+                        <option>Blitz</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <input type="checkbox" id="checkbox-female" checked onclick="filterChangeGender(1)">
+                    Female
+                    </input>
+                    <input type="checkbox" id="checkbox-male" checked onclick="filterChangeGender(2)">
+                    Male
+                    </input>
+                </div>
+                <div class="filter-item">
+                    Federación o País          
+                    <select id="selector-federation" class="selector" onchange="filterChangeFed()">
+                        <option value="ALL">All Countries</option>
+                    </select>
+                </div>
+                <svg class="flag-selector">
+                    <image id="fed-shown" xlink:href="https://upload.wikimedia.org/wikipedia/en/thumb/5/5b/Fidelogo.svg/1200px-Fidelogo.svg.png"></image>
+                </svg>
+                <button onclick="runCode()" class="button-19">Visualizar</button>
+            </div>
+        </div>
     </div>
+    <span>♔♕♖♗♘♙♚♛♜♝♞♟︎♔♕♖♗♘♙♚♛♜♝♞♟︎♔♕♖♗♘♙♚♛♜♝♞♟︎♔♕♖♗♘♙♚♛♜♝♞♟︎♔♕♖♗♘♙♚♛♜♝♞♟︎</span>
     <div class="moac">
         <h3>
             Cantidad de personas dado su ELO Rating

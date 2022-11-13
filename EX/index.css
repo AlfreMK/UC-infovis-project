@@ -39,6 +39,20 @@ body{
     width: 100%;
 }
 
+.horizontal-flex{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-context{
+    font-weight: bold;
+    font-size: 1.2em;
+    text-align: center;
+    color: #262421;
+}
+
 svg{
     overflow: visible;
 }
