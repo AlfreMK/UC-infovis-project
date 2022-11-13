@@ -319,13 +319,6 @@ function flagSvg(flag) {
 }
 
 function dataPlayersAll(data, elosRangeActivated){
-    // for range in elosRangeActivated
-    // const dataPlayers = [];
-    // for (let i = 0; i < elosRangeActivated.length; i++) {
-    //     const elosRange = elosRangeActivated[i];
-    //     const dataFiltered = data.filter(d => ratingShown(d) >= elosRange[0] && ratingShown(d) <= elosRange[1]);
-    //     dataPlayers.push(dataFiltered);
-    // }
     // // do the same but with map
     const dataPlayers = elosRangeActivated.map(
         elosRange => data.filter(
