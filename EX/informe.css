@@ -18,7 +18,15 @@ body{
 .image-width{
     width: 100%;
 }
-
+.images-cursor{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.images-child-cursor{
+    margin: 10px;
+}
 .centering{
     display: flex;
     flex-direction: column;
