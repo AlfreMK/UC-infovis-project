@@ -36,7 +36,7 @@
           <li><b>name</b>: Nombre del jugador</li>
           <li><b>federation</b>: País o federación que representa el jugador. Está codificado con el código <a href="https://en.wikipedia.org/wiki/List_of_IOC_country_codes">IOC</a> respectivo (por ejemplo el de Chile es <b>CHI</b>).</li>
           <li><b>gender</b>: Género con el que se registra el jugador (M de male y F de female).</li>
-          <li><b>title</b>: Título del jugador, puede ser FM, IM o GM (nivel de maestro)</li>
+          <li><b>title</b>: <a href="https://en.wikipedia.org/wiki/FIDE_titles">Título</a> del jugador, puede ser FM, IM o GM (nivel de maestro), entre otros.</li>
           <li><b>yob</b>: Año de nacimiento del jugador</li>
           <li><b>rating_standard</b>: Rating <a href="https://es.wikipedia.org/wiki/Sistema_de_puntuaci%C3%B3n_Elo">ELO</a> en ritmo clásico o estándar</li>
           <li><b>rating_rapid</b>: Rating ELO en ritmo rápido</li>
@@ -154,6 +154,43 @@
       </div>
       <p><b>Figura 5</b>: Tooltips al pasar el cursor por encima de las visualizaciones.</p>
     </div>
+    <h3>
+      Idioms
+    </h3>
+    Los idioms visuales utilizados fueron:
+    <ul>
+      <li>Un gráfico de barra para representar la cantidad de jugadores en un intervalo de rating ELO.
+        Notar que esto cumple con la <b>primera tarea</b> del segundo nivel.</li>
+      <li>Piezas de ajedrez que representan jugadores, su diferencia de altura es proporcional a su diferencia de ELO.
+        Notar que esto cumple con la <b>segunda tarea</b> del segundo nivel.
+      </li>
+    </ul>
+    Por otro lado, los idioms interactivos utilizados fueron:
+    <ul>
+      <li>Tooltip al pasar el cursor por encima de la barra o jugador.</li>
+      <li>Filtro por género, país o federación. Notar que gracias a este idiom se puede cumplir la <b>tercera tarea</b> del segundo nivel</li>
+      <li>Selección de intervalos de rating.</li>
+      <li>Ordenar jugadores de mayor a menor.</li>
+    </ul>
+    <h3>
+      Marcas y canales utilizados
+    </h3>
+    Las marcas y canales utilizados fueron:
+    <ul>
+      <li><b>Marcas</b>: 
+        <ul>
+          <li>
+            <b>Barra</b>: Representa la cantidad de jugadores en un intervalo de rating ELO.
+            Pueden ser clasificados como línea (por que crecen para un solo sentido). Marca tipo 
+          </li>
+          <li>
+            <b>Pieza de ajedrez (dama o rey)</b>: Representa al jugador de ajedrez.
+            Pueden ser clasificados como línea (por que crecen para un solo sentido). Marca tipo ítem.
+          </li>
+        </ul>
+      </li>
+      <li><b>Canales</b>: Posición, color, tamaño, forma, textura, brillo, saturación, transparencia.</li>
+    </ul>
   </article>
 </div>
   
