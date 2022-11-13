@@ -24,6 +24,16 @@ body{
     border-radius: 10px;
 }
 
+.font-small{
+    font-size: 0.8em;
+}
+.font-xs{
+    font-size: 0.5em;
+}
+.title-chess{
+    font-weight: bold;
+}
+
 .text-not-data{
     text-align: center;
     width: 100%;

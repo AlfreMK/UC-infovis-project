@@ -92,6 +92,15 @@ function dataJoinPlayers(datos, minim, maxim) {
                     .transition()
                     .duration(1000)
                         .attr("cy", d => posicionRect(d, escalaAltura) - 14);
+                    update.selectAll(".updatable--37")
+                    .transition()
+                    .duration(1000)
+                        .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(ratingShown(d)) + 37);
+                    update.selectAll(".updatable--49")
+                        .transition()
+                        .duration(1000)
+                            .attr("y", d => posicionRect(d, escalaAltura) + escalaAltura(ratingShown(d)) + 49);
+
                 }
                 ,
                 exit => exit.remove()
@@ -115,6 +124,7 @@ function textTooltip(data) {
 
 function basesvg(svg, escalaAltura, minim, maxim){
     const color = "#202020";
+    const color_title = "#ff4d4d"
     const pieza = svg.append("svg")
         .attr("width", 100)
         .attr("height", 240)
@@ -172,15 +182,24 @@ function basesvg(svg, escalaAltura, minim, maxim){
         .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))+5);
         ;
         pieza.append("text")
-        .attr("class", "updatable2--50")
-        .attr("x", posicionXrect(-20))
-        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))+ 50)
-        .text((d) => textPlayer(d.name))
+            .attr("class", "updatable2--50 font-small")
+            .attr("x",posicionXrect(-17))
+            .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d)) + 50)
+            .text((d) => textPlayer(d.name))
+
         // cuello de la pieza
         pieza.append("polygon")
         .attr("class", "updatable-20 polygon-60")
         .attr("points", (d) => polygonPoints(d, escalaAltura, 60))
         .attr("fill", color)
+
+        // titulo
+        pieza.append("text")
+        .attr("class", "updatable-10 font-xs title-chess")
+        .attr("fill", "white")
+        .attr("x", posicionXrect(0))
+        .attr("y", (d) => posicionRect(d, escalaAltura)+escalaAltura(ratingShown(d))-6)
+        .text((d) => textPlayer(d.title))
     return pieza
 }
 
@@ -220,6 +239,7 @@ function queensvg(svg, escalaAltura, minim, maxim){
         .attr("fill", color)
         .attr("x", posicionXrect(-10))
         .attr("y", (d, i) => posicionRect(d, escalaAltura) + 25);
+        
 }
 
 

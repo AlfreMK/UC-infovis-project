@@ -3,15 +3,20 @@
     
   <head>
     <meta charset="utf-8">
-    <title>Examen Visualización de Información</title>
+    <title>Informe Examen</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <link rel="stylesheet" href="informe.css">
 </head>
 <body>
 <div class="main-container">
-  <h1>
-    Informe
-  </h1>
+  <div class="header-informe">
+    <h1>
+      INFORME
+    </h1>
+    <h2>
+      Medina, Alfredo. 19642865
+    </h2>
+  </div>
   <article class="nivel">
     <h2>
       1. Primer Nivel
@@ -26,6 +31,7 @@
       <h3>Naturaleza de los datos</h3>
         Los datos son de tipo tabular, y contienen información de jugadores con sus respectivo nombre, ratings, género, país de origen,entre otros.
         Específicamente:
+        <ul>
           <li><b>fide_id</b>: Identificador del jugador</li>
           <li><b>name</b>: Nombre del jugador</li>
           <li><b>federation</b>: País o federación que representa el jugador. Está codificado con el código <a href="https://en.wikipedia.org/wiki/List_of_IOC_country_codes">IOC</a> respectivo (por ejemplo el de Chile es <b>CHI</b>).</li>
@@ -70,15 +76,38 @@
       </p>
       <h3>Potencial usuario y uso de la herramienta</h3>
       <p>
-        El potencial usuario de este informe puede ser un jugador de ajedrez (no necesariamente profesional), un aficionado de los deportes, o alguien que simplemente le interese el tema y que quiera saber datos como cuáles son los mejores jugadores de ajedrez del mundo, cuáles son los mejores jugadores de su país, cuál es la distribución de jugadoras con respecto a jugadores, la diferencia en torno a cantidad, entre otras cosas.
+        El potencial usuario de este informe puede ser un jugador de ajedrez (no necesariamente profesional),
+        un aficionado de los deportes, o alguien que simplemente le interese el tema y que quiera saber datos como cuáles son los mejores jugadores de ajedrez del mundo,
+        cuáles son los mejores jugadores de su país, cuál es la distribución de jugadoras con respecto a jugadores, la diferencia en torno a cantidad, entre otras cosas.
       </p>
   </article>
   <article class="nivel">
     <h2>
       2. Segundo Nivel
     </h2>
+    <h3>
+      Abstracción de los datos
+    </h3>
     <p>
-
+      Los datos que se presentan son de tipo ítem. Donde cada ítem representa a un jugador de ajedrez.
+      Con respecto a sus atributos, estos se clasifican en:
+    </p>
+    <ul>
+      <li><b>fide_id</b>: Cuantitativo, secuencial, no cíclico, de tipo llave.</li>
+      <li><b>name</b>: Categórico, de tipo valor.</li>
+      <li><b>federation</b>: Categórico, de tipo valor.</li>
+      <li><b>gender</b>: Categórico, de tipo valor.</li>
+      <li><b>title</b>: Categórico, jerárquico, de tipo valor.</li>
+      <li><b>yob</b>: Cuantitativo, secuencial, no cíclico, de tipo valor.</li>
+      <li><b>rating_standard</b>: Cuantitativo, secuencial, con valor entre 1000 y 3000, no cíclico, de tipo valor.</li>
+      <li><b>rating_rapid</b>: Cuantitativo, secuencial, con valor entre 1000 y 3000, no cíclico, de tipo valor.</li>
+      <li><b>rating_blitz</b>: Cuantitativo, secuencial, con valor entre 1000 y 3000, no cíclico, de tipo valor.</li>
+    </ul>
+    <h3>
+      Abstracción de tareas
+    </h3>
+    <p>
+      <!-- Las tareas que se pueden realizar con los datos son: -->
     </p>
   </article>
   <article class="nivel">

@@ -72,7 +72,7 @@ function dataJoinGraph(datos) {
 }
 
 function brushed(event, escalaBarras, datos) {
-    const color_selected = "red"
+    const color_selected = "#ff4d4d"
     const selection = event.selection; 
     if (selection) {
         const filteredData = datos.filter(d => {
@@ -245,13 +245,13 @@ const parseData = (d) => ({
   });
 
 function removeAllD3() {
-    d3.selectAll("rect").remove();
-    d3.selectAll("g").remove();
     d3.selectAll(`.king`).exit();
     d3.selectAll(`.king`)
         .transition()
         .duration(1000)
         .style("opacity", 0).remove()
+    d3.selectAll("rect").remove();
+    d3.selectAll("g").remove();
     CURRENT_PLAYERS_SHOWN = [];
 }
 
